@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/db";
 import { sendDiscordMessage } from "@/lib/discord";
-import { z } from "zod"; 
+import { z } from "zod";
 import DOMPurify from "isomorphic-dompurify";
 import translate from '@iamtraction/google-translate';
 
@@ -70,13 +70,13 @@ const profileSchema = z.object({
 });
 
 const entertainmentSchema = z.object({
-    apiId: z.string().transform(sanitize),
-    title: z.string().transform(sanitize),
-    type: z.string().transform(sanitize),
-    image: z.string().optional().transform(val => val ? sanitize(val) : ""),
-    rating: z.string().optional().transform(val => val ? sanitize(val) : ""),
-    year: z.string().optional().transform(val => val ? sanitize(val) : ""),
-    status: z.string().optional().transform(val => val ? sanitize(val) : "")
+  apiId: z.string().transform(sanitize),
+  title: z.string().transform(sanitize),
+  type: z.string().transform(sanitize),
+  image: z.string().optional().transform(val => val ? sanitize(val) : ""),
+  rating: z.string().optional().transform(val => val ? sanitize(val) : ""),
+  year: z.string().optional().transform(val => val ? sanitize(val) : ""),
+  status: z.string().optional().transform(val => val ? sanitize(val) : "")
 });
 
 // ==========================================
@@ -86,21 +86,21 @@ const entertainmentSchema = z.object({
 export async function getUser() {
   const session = await getServerSession(authOptions);
   if (!session || !session.user?.email) return null;
-  
+
   await connectDB();
   const user = await User.findOne({ email: session.user.email });
   return user;
 }
 
 async function translateToAr(text: string) {
-    if (!text || text.trim() === "") return "";
-    try {
-        const res = await translate(text, { to: 'ar' });
-        return res.text;
-    } catch (e) {
-        console.error("Translation Error:", e);
-        return text; 
-    }
+  if (!text || text.trim() === "") return "";
+  try {
+    const res = await translate(text, { to: 'ar' });
+    return res.text;
+  } catch (e) {
+    console.error("Translation Error:", e);
+    return text;
+  }
 }
 
 export async function addXP(amount: number) {
@@ -121,31 +121,31 @@ export async function addXP(amount: number) {
 
 // --- Mock Data ---
 const getMockResults = (query: string, type: string, lang: string) => {
-    const isAr = lang === 'ar';
-    const titles = isAr 
-        ? [`الأسطورة: ${query}`, `عودة ${query}`, `حرب ${query}`]
-        : [`The Legend of ${query}`, `Return of ${query}`, `War of ${query}`];
-    
-    return titles.map((t, i) => ({
-        apiId: `mock-${type}-${i}-${Math.random()}`,
-        title: t,
-        image: `https://placehold.co/400x600/101010/FFF.png?text=${type.toUpperCase()}+${i+1}`,
-        rating: (Math.random() * 5 + 5).toFixed(1) + "/10",
-        year: "2025",
-        type: type
-    }));
+  const isAr = lang === 'ar';
+  const titles = isAr
+    ? [`الأسطورة: ${query}`, `عودة ${query}`, `حرب ${query}`]
+    : [`The Legend of ${query}`, `Return of ${query}`, `War of ${query}`];
+
+  return titles.map((t, i) => ({
+    apiId: `mock-${type}-${i}-${Math.random()}`,
+    title: t,
+    image: `https://placehold.co/400x600/101010/FFF.png?text=${type.toUpperCase()}+${i + 1}`,
+    rating: (Math.random() * 5 + 5).toFixed(1) + "/10",
+    year: "2025",
+    type: type
+  }));
 };
 
 const getMockDetails = (type: string, lang: string) => {
-    const isAr = lang === 'ar';
-    return {
-        description: isAr 
-            ? "هذا نص تجريبي لوصف العنصر. البيانات الحقيقية تتطلب مفاتيح API."
-            : "This is a mock description because no API key was provided.",
-        genres: isAr ? "أكشن، مغامرة" : "Action, Adventure",
-        trailer: "https://www.youtube.com/embed/jfKfPfyJRdk",
-        backdrop: "https://images.unsplash.com/photo-1536440136628-849c177e76a1"
-    };
+  const isAr = lang === 'ar';
+  return {
+    description: isAr
+      ? "هذا نص تجريبي لوصف العنصر. البيانات الحقيقية تتطلب مفاتيح API."
+      : "This is a mock description because no API key was provided.",
+    genres: isAr ? "أكشن، مغامرة" : "Action, Adventure",
+    trailer: "https://www.youtube.com/embed/jfKfPfyJRdk",
+    backdrop: "https://images.unsplash.com/photo-1536440136628-849c177e76a1"
+  };
 };
 
 // ==========================================
@@ -162,30 +162,32 @@ export async function createProject(formData: FormData) {
     if (!allow) return { success: false, message: "Please wait before creating another project." };
 
     const rawData = {
-        title: formData.get("title"),
-        description: formData.get("description"),
-        link: formData.get("link"),
-        tags: formData.get("tags"),
+      title: formData.get("title"),
+      description: formData.get("description"),
+      link: formData.get("link"),
+      tags: formData.get("tags"),
     };
-    
+
     const validation = projectSchema.safeParse(rawData);
-    if (!validation.success) return { success: false, message: validation.error.errors[0].message };
+    if (!validation.success) {
+      return { success: false, message: (validation.error as any).errors[0].message };
+    }
 
     const { title, description, link, tags } = validation.data;
-    
+
     await Project.create({
       userId: user._id,
       title,
       description,
       link,
       tags: tags ? tags.split(',') : [],
-      xpReward: 500, 
+      xpReward: 500,
       status: 'active'
     });
 
     revalidatePath("/");
     return { success: true };
-  } catch (error) { 
+  } catch (error) {
     return { success: false, message: "Server Error" };
   }
 }
@@ -231,11 +233,11 @@ export async function shipProject(projectId: string, data: any) {
 }
 
 export async function deleteProject(id: string) {
-    try {
-        await Project.findByIdAndDelete(id);
-        revalidatePath("/projects");
-        return { success: true };
-    } catch (e) { return { success: false }; }
+  try {
+    await Project.findByIdAndDelete(id);
+    revalidatePath("/projects");
+    return { success: true };
+  } catch (e) { return { success: false }; }
 }
 
 export async function setProjectFocus(projectId: string) {
@@ -247,18 +249,18 @@ export async function setProjectFocus(projectId: string) {
     await Project.findByIdAndUpdate(projectId, { $set: { isFocus: true } });
 
     revalidatePath("/");
-    revalidatePath("/projects"); 
+    revalidatePath("/projects");
     return { success: true };
   } catch (e) { return { success: false }; }
 }
 
 export async function unsetProjectFocus(projectId: string) {
-    try {
-        await Project.findByIdAndUpdate(projectId, { $set: { isFocus: false } });
-        revalidatePath("/");
-        revalidatePath("/projects");
-        return { success: true };
-    } catch (e) { return { success: false }; }
+  try {
+    await Project.findByIdAndUpdate(projectId, { $set: { isFocus: false } });
+    revalidatePath("/");
+    revalidatePath("/projects");
+    return { success: true };
+  } catch (e) { return { success: false }; }
 }
 
 // ==========================================
@@ -282,7 +284,7 @@ export async function logWorkout(planId: string, exercisesData: any) {
       userId: user._id,
       planId: plan._id,
       dayTitle: plan.days[plan.currentDayIndex].title,
-      exercises: exercisesData, 
+      exercises: exercisesData,
       completedAt: today
     });
 
@@ -290,15 +292,15 @@ export async function logWorkout(planId: string, exercisesData: any) {
     const currentIndex = plan.currentDayIndex;
 
     if (currentIndex >= totalDays - 1) {
-        plan.isActive = false; 
-        plan.status = 'completed'; 
+      plan.isActive = false;
+      plan.status = 'completed';
     } else {
-        plan.currentDayIndex += 1; 
+      plan.currentDayIndex += 1;
     }
 
     await plan.save();
 
-    user.xp = (user.xp || 0) + 150; 
+    user.xp = (user.xp || 0) + 150;
     await user.save();
 
     revalidatePath("/");
@@ -331,15 +333,15 @@ export async function createWorkoutPlan(title: string, description: string) {
     if (!rateLimit(`create-plan-${user._id}`, 5, 60000)) return { success: false, message: "Please wait." };
 
     const validation = workoutPlanSchema.safeParse({ title, description });
-    if (!validation.success) return { success: false, msg: validation.error.errors[0].message };
+    if (!validation.success) return { success: false, msg: (validation.error as any).errors[0].message };
 
     const activePlan = await WorkoutPlan.findOne({ userId: user._id, isActive: true });
     const newPlan = await WorkoutPlan.create({
       userId: user._id,
       title: validation.data.title,
       description: validation.data.description,
-      isActive: !activePlan, 
-      days: [] 
+      isActive: !activePlan,
+      days: []
     });
     revalidatePath("/fitness");
     return { success: true, planId: newPlan._id.toString() };
@@ -365,29 +367,29 @@ export async function saveDayToPlan(planId: string, dayData: any) {
 
     let cleanExercises: any[] = [];
     if (dayData.exercises && Array.isArray(dayData.exercises)) {
-        cleanExercises = dayData.exercises
-            .filter((ex: any) => ex.name && ex.name.trim() !== "")
-            .map((ex: any) => ({
-                name: DOMPurify.sanitize(ex.name), 
-                mediaUrl: DOMPurify.sanitize(ex.mediaUrl || ""),
-                mediaType: ex.mediaType,
-                sets: Number(ex.sets),
-                reps: Number(ex.reps),
-                restBetweenSets: Number(ex.restBetweenSets),
-            }));
+      cleanExercises = dayData.exercises
+        .filter((ex: any) => ex.name && ex.name.trim() !== "")
+        .map((ex: any) => ({
+          name: DOMPurify.sanitize(ex.name),
+          mediaUrl: DOMPurify.sanitize(ex.mediaUrl || ""),
+          mediaType: ex.mediaType,
+          sets: Number(ex.sets),
+          reps: Number(ex.reps),
+          restBetweenSets: Number(ex.restBetweenSets),
+        }));
     }
 
     const newDayData = {
-        dayNumber: dayData.dayNumber,
-        title: DOMPurify.sanitize(dayData.title || ""),
-        isRestDay: dayData.isRestDay,
-        exercises: cleanExercises
+      dayNumber: dayData.dayNumber,
+      title: DOMPurify.sanitize(dayData.title || ""),
+      isRestDay: dayData.isRestDay,
+      exercises: cleanExercises
     };
 
     const existingDayIndex = plan.days.findIndex((d: any) => d.dayNumber === dayData.dayNumber);
-    if (existingDayIndex >= 0) { plan.days[existingDayIndex] = newDayData; } 
+    if (existingDayIndex >= 0) { plan.days[existingDayIndex] = newDayData; }
     else { plan.days.push(newDayData); }
-    
+
     plan.days.sort((a: any, b: any) => a.dayNumber - b.dayNumber);
     plan.markModified('days');
     await plan.save();
@@ -402,8 +404,8 @@ export async function activateWorkoutPlan(planId: string) {
     if (!user) return { success: false };
     await WorkoutPlan.updateMany({ userId: user._id }, { isActive: false });
     await WorkoutPlan.findByIdAndUpdate(planId, { isActive: true, currentDayIndex: 0 });
-    revalidatePath("/"); 
-    revalidatePath("/fitness"); 
+    revalidatePath("/");
+    revalidatePath("/fitness");
     return { success: true };
   } catch (error) { return { success: false }; }
 }
@@ -418,11 +420,11 @@ export async function getActiveWorkoutSession() {
 
     const dayIndex = plan.currentDayIndex || 0;
     if (!plan.days[dayIndex]) return { status: "plan-completed" };
-    
+
     const dayData = plan.days[dayIndex];
-    return { 
-      status: "ready", 
-      data: JSON.parse(JSON.stringify(dayData)), 
+    return {
+      status: "ready",
+      data: JSON.parse(JSON.stringify(dayData)),
       planId: plan._id.toString(),
       dayIndex: dayIndex + 1
     };
@@ -438,11 +440,11 @@ export async function completeDailySession(planId: string) {
       userId: user._id,
       planId: planId,
       completedAt: new Date(),
-      xpEarned: 200, 
+      xpEarned: 200,
     });
 
     await User.findByIdAndUpdate(user._id, {
-      $inc: { xp: 200 }, 
+      $inc: { xp: 200 },
       $set: { lastWorkout: new Date() }
     });
 
@@ -450,13 +452,13 @@ export async function completeDailySession(planId: string) {
     todayStart.setHours(0, 0, 0, 0);
 
     await Task.findOneAndUpdate(
-      { 
-        userId: user._id, 
-        type: 'fitness', 
-        date: { $gte: todayStart } 
+      {
+        userId: user._id,
+        type: 'fitness',
+        date: { $gte: todayStart }
       },
       { isCompleted: true },
-      { upsert: true, new: true } 
+      { upsert: true, new: true }
     );
 
     await checkAndIncrementStreak(user._id);
@@ -486,7 +488,7 @@ async function checkAndIncrementStreak(userId: string) {
   if (allCompleted) {
     const user = await User.findById(userId);
     const lastStreakUpdate = new Date(user.lastStreakUpdate || 0);
-    
+
     if (lastStreakUpdate < todayStart) {
       await User.findByIdAndUpdate(userId, {
         $inc: { currentStreak: 1 },
@@ -523,10 +525,10 @@ export async function fillRestDays(planId: string, dayNumbers: number[]) {
     if (!plan) return { success: false };
 
     const restDays = dayNumbers.map(num => ({
-        dayNumber: num,
-        title: "استشفاء",
-        isRestDay: true,
-        exercises: []
+      dayNumber: num,
+      title: "استشفاء",
+      isRestDay: true,
+      exercises: []
     }));
 
     plan.days.push(...restDays);
@@ -569,15 +571,15 @@ export async function addBook(formData: FormData) {
     if (!rateLimit(`add-book-${user._id}`, 10, 60000)) return { success: false, message: "Limit reached." };
 
     const rawData = {
-        title: formData.get("title"),
-        description: formData.get("description"),
-        link: formData.get("link"),
-        totalUnits: formData.get("totalUnits"),
-        image: formData.get("image"),
+      title: formData.get("title"),
+      description: formData.get("description"),
+      link: formData.get("link"),
+      totalUnits: formData.get("totalUnits"),
+      image: formData.get("image"),
     };
 
     const validation = resourceSchema.safeParse(rawData);
-    if (!validation.success) return { success: false, message: validation.error.errors[0].message };
+    if (!validation.success) return { success: false, message: (validation.error as any).errors[0].message };
 
     const { title, description, link, totalUnits, image } = validation.data;
 
@@ -592,11 +594,11 @@ export async function addBook(formData: FormData) {
 }
 
 export async function startReadingBook(bookId: string) {
-    const user = await getUser();
-    if (!user) return;
-    await Resource.updateMany({ userId: user._id, status: 'reading' }, { status: 'idle' });
-    await Resource.findByIdAndUpdate(bookId, { status: 'reading' });
-    revalidatePath("/");
+  const user = await getUser();
+  if (!user) return;
+  await Resource.updateMany({ userId: user._id, status: 'reading' }, { status: 'idle' });
+  await Resource.findByIdAndUpdate(bookId, { status: 'reading' });
+  revalidatePath("/");
 }
 
 export async function updateProgress(resourceId: string, amount: number) {
@@ -608,8 +610,8 @@ export async function updateProgress(resourceId: string, amount: number) {
 
     resource.completedUnits = Math.min(resource.completedUnits + amount, resource.totalUnits);
     if (resource.completedUnits >= resource.totalUnits && resource.status !== 'completed') {
-       resource.status = 'completed';
-       await addXP(300);
+      resource.status = 'completed';
+      await addXP(300);
     }
     await resource.save();
     revalidatePath("/");
@@ -617,18 +619,18 @@ export async function updateProgress(resourceId: string, amount: number) {
 }
 
 export async function finishBook(bookId: string) {
-    const user = await getUser();
-    if (!user) return;
-    await Resource.findByIdAndUpdate(bookId, { status: 'completed', completedUnits: 9999 }); 
-    await addXP(300);
-    revalidatePath("/");
+  const user = await getUser();
+  if (!user) return;
+  await Resource.findByIdAndUpdate(bookId, { status: 'completed', completedUnits: 9999 });
+  await addXP(300);
+  revalidatePath("/");
 }
 
 export async function resetBookStatus(bookId: string) {
-    const user = await getUser();
-    if (!user) return;
-    await Resource.findByIdAndUpdate(bookId, { status: 'idle' });
-    revalidatePath("/");
+  const user = await getUser();
+  if (!user) return;
+  await Resource.findByIdAndUpdate(bookId, { status: 'idle' });
+  revalidatePath("/");
 }
 
 export async function deleteBook(bookId: string) {
@@ -642,23 +644,23 @@ export async function updateResource(formData: FormData) {
   try {
     const user = await getUser();
     if (!user) return { success: false };
-    
+
     // 🛡️ Zod Validation & Sanitization
     const rawData = {
-        title: formData.get("title"),
-        description: formData.get("description"),
-        link: formData.get("link"),
-        totalUnits: formData.get("totalUnits"),
-        image: formData.get("image"),
+      title: formData.get("title"),
+      description: formData.get("description"),
+      link: formData.get("link"),
+      totalUnits: formData.get("totalUnits"),
+      image: formData.get("image"),
     };
     const validation = resourceSchema.safeParse(rawData);
-    if (!validation.success) return { success: false, message: validation.error.errors[0].message };
+    if (!validation.success) return { success: false, message: (validation.error as any).errors[0].message };
 
     const id = formData.get("id") as string;
-    
+
     await Resource.findOneAndUpdate(
-        { _id: id, userId: user._id },
-        validation.data // Safe data
+      { _id: id, userId: user._id },
+      validation.data // Safe data
     );
     revalidatePath("/");
     return { success: true };
@@ -687,13 +689,13 @@ export async function createCourse(formData: FormData) {
     if (!rateLimit(`create-course-${user._id}`, 5, 60000)) return { success: false, message: "Limit reached" };
 
     const rawData = {
-        title: formData.get("title"),
-        description: formData.get("description"),
-        link: formData.get("link"),
-        image: formData.get("image"),
+      title: formData.get("title"),
+      description: formData.get("description"),
+      link: formData.get("link"),
+      image: formData.get("image"),
     };
     const validation = courseSchema.safeParse(rawData);
-    if (!validation.success) return { success: false, message: validation.error.errors[0].message };
+    if (!validation.success) return { success: false, message: (validation.error as any).errors[0].message };
 
     await Course.create({
       userId: user._id,
@@ -733,11 +735,11 @@ export async function finishCourse(id: string, certData: any) {
 }
 
 export async function deleteCourse(id: string) {
-    try {
-        await Course.findByIdAndDelete(id);
-        revalidatePath("/");
-        return { success: true };
-    } catch (e) { return { success: false }; }
+  try {
+    await Course.findByIdAndDelete(id);
+    revalidatePath("/");
+    return { success: true };
+  } catch (e) { return { success: false }; }
 }
 
 // ==========================================
@@ -748,36 +750,36 @@ export async function getUserProfileStats() {
   try {
     const user = await getUser();
     if (!user) return { success: false };
-    
+
     // ... (جلب البيانات كما هو - لا تغيير في القراءة)
     const [workouts, books, projects, courses, ent] = await Promise.all([
-        Workout.find({ userId: user._id }).sort({ completedAt: -1 }).limit(10).populate('planId', 'title').lean(),
-        Resource.find({ userId: user._id, status: 'completed' }).sort({ updatedAt: -1 }).limit(5).lean(),
-        Project.find({ userId: user._id, status: 'completed' }).sort({ completedAt: -1 }).limit(5).lean(),
-        Course.find({ userId: user._id, status: 'completed' }).sort({ completedAt: -1 }).limit(5).lean(),
-        Entertainment.find({ userId: user._id, status: 'completed' }).sort({ completedAt: -1 }).limit(5).lean(),
+      Workout.find({ userId: user._id }).sort({ completedAt: -1 }).limit(10).populate('planId', 'title').lean(),
+      Resource.find({ userId: user._id, status: 'completed' }).sort({ updatedAt: -1 }).limit(5).lean(),
+      Project.find({ userId: user._id, status: 'completed' }).sort({ completedAt: -1 }).limit(5).lean(),
+      Course.find({ userId: user._id, status: 'completed' }).sort({ completedAt: -1 }).limit(5).lean(),
+      Entertainment.find({ userId: user._id, status: 'completed' }).sort({ completedAt: -1 }).limit(5).lean(),
     ]);
 
     const combinedHistory = [
-        ...workouts.map((w:any) => ({ id: w._id.toString(), title: w.planId?.title || "Workout", type: "workout", xp: w.xpEarned || 200, date: w.completedAt })),
-        ...books.map((b:any) => ({ id: b._id.toString(), title: b.title, type: "book", xp: 300, date: b.updatedAt })),
-        ...projects.map((p:any) => ({ id: p._id.toString(), title: p.title, type: "project", xp: 500, date: p.completedAt })),
-        ...courses.map((c:any) => ({ id: c._id.toString(), title: c.title, type: "course", xp: 1000, date: c.completedAt })),
-        ...ent.map((e:any) => ({ id: e._id.toString(), title: e.title, type: "entertainment", xp: 150, date: e.completedAt })),
-    ].sort((a:any, b:any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 20);
+      ...workouts.map((w: any) => ({ id: w._id.toString(), title: w.planId?.title || "Workout", type: "workout", xp: w.xpEarned || 200, date: w.completedAt })),
+      ...books.map((b: any) => ({ id: b._id.toString(), title: b.title, type: "book", xp: 300, date: b.updatedAt })),
+      ...projects.map((p: any) => ({ id: p._id.toString(), title: p.title, type: "project", xp: 500, date: p.completedAt })),
+      ...courses.map((c: any) => ({ id: c._id.toString(), title: c.title, type: "course", xp: 1000, date: c.completedAt })),
+      ...ent.map((e: any) => ({ id: e._id.toString(), title: e.title, type: "entertainment", xp: 150, date: e.completedAt })),
+    ].sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 20);
 
     const [allWorkouts, allBooks, allProjects, allCourses] = await Promise.all([
-        Workout.find({ userId: user._id }).select('completedAt').lean(),
-        Resource.find({ userId: user._id, status: 'completed' }).select('updatedAt').lean(),
-        Project.find({ userId: user._id, status: 'completed' }).select('completedAt').lean(),
-        Course.find({ userId: user._id, status: 'completed' }).select('completedAt').lean(),
+      Workout.find({ userId: user._id }).select('completedAt').lean(),
+      Resource.find({ userId: user._id, status: 'completed' }).select('updatedAt').lean(),
+      Project.find({ userId: user._id, status: 'completed' }).select('completedAt').lean(),
+      Course.find({ userId: user._id, status: 'completed' }).select('completedAt').lean(),
     ]);
 
     const activityDates = [
-        ...allWorkouts.map((i:any) => i.completedAt),
-        ...allBooks.map((i:any) => i.updatedAt),
-        ...allProjects.map((i:any) => i.completedAt),
-        ...allCourses.map((i:any) => i.completedAt),
+      ...allWorkouts.map((i: any) => i.completedAt),
+      ...allBooks.map((i: any) => i.updatedAt),
+      ...allProjects.map((i: any) => i.completedAt),
+      ...allCourses.map((i: any) => i.completedAt),
     ].map(date => new Date(date).toISOString().split('T')[0]);
 
     const completedBooksList = await Resource.find({ userId: user._id, status: 'completed' }).sort({ updatedAt: -1 });
@@ -787,49 +789,49 @@ export async function getUserProfileStats() {
 
     const last7Days = [];
     for (let i = 6; i >= 0; i--) {
-        const d = new Date(); d.setDate(d.getDate() - i); d.setHours(0,0,0,0);
-        const nextDay = new Date(d); nextDay.setDate(d.getDate() + 1);
-        const count = await Workout.countDocuments({ userId: user._id, completedAt: { $gte: d, $lt: nextDay } });
-        last7Days.push({ day: d.toLocaleDateString('en-US', { weekday: 'short' }), count });
+      const d = new Date(); d.setDate(d.getDate() - i); d.setHours(0, 0, 0, 0);
+      const nextDay = new Date(d); nextDay.setDate(d.getDate() + 1);
+      const count = await Workout.countDocuments({ userId: user._id, completedAt: { $gte: d, $lt: nextDay } });
+      last7Days.push({ day: d.toLocaleDateString('en-US', { weekday: 'short' }), count });
     }
 
     return {
-        success: true,
-        user: JSON.parse(JSON.stringify(user)),
-        history: combinedHistory,
-        activityMap: activityDates, 
-        completedBooks: JSON.parse(JSON.stringify(completedBooksList)),
-        completedProjects: JSON.parse(JSON.stringify(completedProjectsList)),
-        completedCourses: JSON.parse(JSON.stringify(completedCoursesList)),
-        stats: { totalWorkouts, chartData: last7Days }
+      success: true,
+      user: JSON.parse(JSON.stringify(user)),
+      history: combinedHistory,
+      activityMap: activityDates,
+      completedBooks: JSON.parse(JSON.stringify(completedBooksList)),
+      completedProjects: JSON.parse(JSON.stringify(completedProjectsList)),
+      completedCourses: JSON.parse(JSON.stringify(completedCoursesList)),
+      stats: { totalWorkouts, chartData: last7Days }
     };
   } catch (error) { return { success: false }; }
 }
 
 export async function updateUserProfile(formData: FormData) {
-    try {
-        const user = await getUser();
-        if (!user) return { success: false };
-        
-        // 🚦 Rate Limit
-        if (!rateLimit(`update-profile-${user._id}`, 3, 60000)) return { success: false, message: "Update limit reached" };
+  try {
+    const user = await getUser();
+    if (!user) return { success: false };
 
-        const rawData = {
-            name: formData.get("name"),
-            image: formData.get("image"),
-        };
-        const validation = profileSchema.safeParse(rawData);
-        if (!validation.success) return { success: false }; 
+    // 🚦 Rate Limit
+    if (!rateLimit(`update-profile-${user._id}`, 3, 60000)) return { success: false, message: "Update limit reached" };
 
-        const updateData: any = {};
-        if (validation.data.name) updateData.name = validation.data.name;
-        if (validation.data.image) updateData.image = validation.data.image;
-        
-        await User.findByIdAndUpdate(user._id, updateData);
-        revalidatePath("/");
-        revalidatePath("/profile");
-        return { success: true };
-    } catch (error) { return { success: false }; }
+    const rawData = {
+      name: formData.get("name"),
+      image: formData.get("image"),
+    };
+    const validation = profileSchema.safeParse(rawData);
+    if (!validation.success) return { success: false };
+
+    const updateData: any = {};
+    if (validation.data.name) updateData.name = validation.data.name;
+    if (validation.data.image) updateData.image = validation.data.image;
+
+    await User.findByIdAndUpdate(user._id, updateData);
+    revalidatePath("/");
+    revalidatePath("/profile");
+    return { success: true };
+  } catch (error) { return { success: false }; }
 }
 
 // ==========================================
@@ -848,79 +850,85 @@ export async function getEntertainment() {
 export async function searchEntertainment(query: string, type: 'game' | 'movie' | 'manga', lang: 'ar' | 'en') {
   try {
     const safeQuery = encodeURIComponent(query); // 🛡️ URL Encoding for Search
-    
+
     if (type === 'manga') {
       const res = await fetch(`https://api.jikan.moe/v4/manga?q=${safeQuery}&limit=5`);
       const data = await res.json();
-      return { success: true, results: data.data?.map((i: any) => ({
-        apiId: i.mal_id.toString(),
-        title: i.title_english || i.title, 
-        image: i.images.jpg.large_image_url,
-        rating: i.score ? `${i.score}/10` : "N/A",
-        shortDescription: i.synopsis ? i.synopsis.substring(0, 120) + "..." : "",
-        year: i.published?.from ? new Date(i.published.from).getFullYear() : "N/A",
-        type: 'manga'
-      })) || [] };
+      return {
+        success: true, results: data.data?.map((i: any) => ({
+          apiId: i.mal_id.toString(),
+          title: i.title_english || i.title,
+          image: i.images.jpg.large_image_url,
+          rating: i.score ? `${i.score}/10` : "N/A",
+          shortDescription: i.synopsis ? i.synopsis.substring(0, 120) + "..." : "",
+          year: i.published?.from ? new Date(i.published.from).getFullYear() : "N/A",
+          type: 'manga'
+        })) || []
+      };
     }
 
     if (type === 'movie') {
-       const API_KEY = process.env.TMDB_KEY;
-       if (API_KEY) {
-         const langParam = lang === 'ar' ? 'ar-SA' : 'en-US';
-         const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&query=${safeQuery}&language=${langParam}`);
-         const data = await res.json();
-         return { success: true, results: data.results?.filter((i:any) => i.media_type !== 'person').slice(0, 5).map((i:any) => ({
-           apiId: i.id.toString(),
-           title: i.title || i.name,
-           image: i.poster_path ? `https://image.tmdb.org/t/p/w500${i.poster_path}` : "",
-           rating: i.vote_average ? `${i.vote_average.toFixed(1)}/10` : "N/A",
-           shortDescription: i.overview ? i.overview.substring(0, 100) + "..." : "",
-           year: (i.release_date || i.first_air_date || "").substring(0, 4),
-           type: 'movie'
-         })) || [] };
-       }
-       return { success: true, results: getMockResults(query, 'movie', lang) };
+      const API_KEY = process.env.TMDB_KEY;
+      if (API_KEY) {
+        const langParam = lang === 'ar' ? 'ar-SA' : 'en-US';
+        const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&query=${safeQuery}&language=${langParam}`);
+        const data = await res.json();
+        return {
+          success: true, results: data.results?.filter((i: any) => i.media_type !== 'person').slice(0, 5).map((i: any) => ({
+            apiId: i.id.toString(),
+            title: i.title || i.name,
+            image: i.poster_path ? `https://image.tmdb.org/t/p/w500${i.poster_path}` : "",
+            rating: i.vote_average ? `${i.vote_average.toFixed(1)}/10` : "N/A",
+            shortDescription: i.overview ? i.overview.substring(0, 100) + "..." : "",
+            year: (i.release_date || i.first_air_date || "").substring(0, 4),
+            type: 'movie'
+          })) || []
+        };
+      }
+      return { success: true, results: getMockResults(query, 'movie', lang) };
     }
 
     if (type === 'game') {
-        const API_KEY = process.env.RAWG_KEY;
-        if(API_KEY) {
-            const res = await fetch(`https://api.rawg.io/api/games?key=${API_KEY}&search=${safeQuery}&page_size=5`);
-            const data = await res.json();
-            return { success: true, results: data.results?.map((i:any) => ({
-                apiId: i.id.toString(),
-                title: i.name,
-                image: i.background_image,
-                rating: i.rating ? `${i.rating}/5` : "N/A",
-                shortDescription: i.genres?.map((g:any) => g.name).slice(0,3).join(", ") || "", 
-                year: i.released ? i.released.substring(0, 4) : "N/A",
-                type: 'game'
-            })) || [] };
-        }
-        return { success: true, results: getMockResults(query, 'game', lang) };
+      const API_KEY = process.env.RAWG_KEY;
+      if (API_KEY) {
+        const res = await fetch(`https://api.rawg.io/api/games?key=${API_KEY}&search=${safeQuery}&page_size=5`);
+        const data = await res.json();
+        return {
+          success: true, results: data.results?.map((i: any) => ({
+            apiId: i.id.toString(),
+            title: i.name,
+            image: i.background_image,
+            rating: i.rating ? `${i.rating}/5` : "N/A",
+            shortDescription: i.genres?.map((g: any) => g.name).slice(0, 3).join(", ") || "",
+            year: i.released ? i.released.substring(0, 4) : "N/A",
+            type: 'game'
+          })) || []
+        };
+      }
+      return { success: true, results: getMockResults(query, 'game', lang) };
     }
     return { success: true, results: [] };
   } catch (e) { return { success: false, results: [] }; }
 }
 
 export async function getEntertainmentDetails(apiId: string, type: string, lang: 'ar' | 'en') {
-    try {
-        if (apiId.startsWith('mock')) return { success: true, details: getMockDetails(type, lang) };
+  try {
+    if (apiId.startsWith('mock')) return { success: true, details: getMockDetails(type, lang) };
 
-        // ... (تم اختصار كود جلب التفاصيل هنا للحفاظ على السياق، ولكن في ملفك الحقيقي، أبقِ الكود الأصلي لجلب التفاصيل كما هو)
-        // ... (Keep Original Fetch Logic Here)
-        return { success: true, details: getMockDetails(type, lang) }; 
+    // ... (تم اختصار كود جلب التفاصيل هنا للحفاظ على السياق، ولكن في ملفك الحقيقي، أبقِ الكود الأصلي لجلب التفاصيل كما هو)
+    // ... (Keep Original Fetch Logic Here)
+    return { success: true, details: getMockDetails(type, lang) };
 
-    } catch (e) {
-        return { success: true, details: getMockDetails(type, lang) };
-    }
+  } catch (e) {
+    return { success: true, details: getMockDetails(type, lang) };
+  }
 }
 
 export async function addEntertainment(data: any) {
   try {
     const user = await getUser();
-    if(!user) return { success: false };
-    
+    if (!user) return { success: false };
+
     // 🚦 Rate Limit
     if (!rateLimit(`add-ent-${user._id}`, 10, 60000)) return { success: false, message: "Please wait" };
 
@@ -930,7 +938,7 @@ export async function addEntertainment(data: any) {
 
     const exists = await Entertainment.findOne({ userId: user._id, apiId: data.apiId });
     if (exists) return { success: false, message: "Already added!" };
-    
+
     await Entertainment.create({ userId: user._id, ...validation.data, status: 'pending' });
     revalidatePath("/");
     return { success: true };
@@ -948,7 +956,7 @@ export async function setActiveEntertainment(id: string, type: string) {
 }
 
 export async function deleteEntertainment(id: string) {
-    try { await Entertainment.findByIdAndDelete(id); revalidatePath("/"); return { success: true }; } catch (e) { return { success: false }; }
+  try { await Entertainment.findByIdAndDelete(id); revalidatePath("/"); return { success: true }; } catch (e) { return { success: false }; }
 }
 
 export async function pauseEntertainment() {
@@ -963,7 +971,7 @@ export async function pauseEntertainment() {
 export async function finishEntertainment(id: string) {
   try {
     const user = await getUser();
-    if(!user) return { success: false };
+    if (!user) return { success: false };
     await Entertainment.findByIdAndUpdate(id, { status: 'completed', completedAt: new Date() });
     await addXP(150);
     revalidatePath("/");
@@ -977,49 +985,49 @@ export async function finishEntertainment(id: string) {
 
 // ... (Task Banks - Same as before)
 const DAILY_BANK = [
-    { key: "task_plan_tomorrow", cat: "planning", xp: 50 },
-    { key: "task_drink_water", cat: "health", xp: 30 },
-    { key: "task_meditate", cat: "mindset", xp: 50 },
-    { key: "task_clean_desk", cat: "system", xp: 40 },
-    { key: "task_review_expenses", cat: "finance", xp: 60 },
-    { key: "task_journal", cat: "mindset", xp: 50 },
-    { key: "task_sleep_8h", cat: "health", xp: 100 },
-    { key: "task_no_sugar", cat: "health", xp: 80 },
-    { key: "task_walk_5k", cat: "fitness", xp: 100 },
-    { key: "task_organize_files", cat: "system", xp: 40 }
+  { key: "task_plan_tomorrow", cat: "planning", xp: 50 },
+  { key: "task_drink_water", cat: "health", xp: 30 },
+  { key: "task_meditate", cat: "mindset", xp: 50 },
+  { key: "task_clean_desk", cat: "system", xp: 40 },
+  { key: "task_review_expenses", cat: "finance", xp: 60 },
+  { key: "task_journal", cat: "mindset", xp: 50 },
+  { key: "task_sleep_8h", cat: "health", xp: 100 },
+  { key: "task_no_sugar", cat: "health", xp: 80 },
+  { key: "task_walk_5k", cat: "fitness", xp: 100 },
+  { key: "task_organize_files", cat: "system", xp: 40 }
 ];
 
 const WEEKLY_BANK = [
-    { key: "task_weekly_code_review", cat: "project", xp: 300 },
-    { key: "task_long_cardio", cat: "fitness", xp: 300 },
-    { key: "task_organize_workspace", cat: "system", xp: 200 },
-    { key: "task_meal_prep", cat: "health", xp: 250 },
-    { key: "task_review_finance_weekly", cat: "finance", xp: 300 },
-    { key: "task_backup_data", cat: "system", xp: 200 },
-    { key: "task_social_detox", cat: "mindset", xp: 400 },
-    { key: "task_learn_algo", cat: "learning", xp: 350 },
-    { key: "task_deep_clean", cat: "general", xp: 250 },
-    { key: "task_update_cv", cat: "career", xp: 300 }
+  { key: "task_weekly_code_review", cat: "project", xp: 300 },
+  { key: "task_long_cardio", cat: "fitness", xp: 300 },
+  { key: "task_organize_workspace", cat: "system", xp: 200 },
+  { key: "task_meal_prep", cat: "health", xp: 250 },
+  { key: "task_review_finance_weekly", cat: "finance", xp: 300 },
+  { key: "task_backup_data", cat: "system", xp: 200 },
+  { key: "task_social_detox", cat: "mindset", xp: 400 },
+  { key: "task_learn_algo", cat: "learning", xp: 350 },
+  { key: "task_deep_clean", cat: "general", xp: 250 },
+  { key: "task_update_cv", cat: "career", xp: 300 }
 ];
 
 const MONTHLY_BANK = [
-    { key: "task_update_portfolio", cat: "career", xp: 1000 },
-    { key: "task_read_book", cat: "reading", xp: 1000 },
-    { key: "task_review_goals", cat: "planning", xp: 500 },
-    { key: "task_analyze_spending", cat: "finance", xp: 800 },
-    { key: "task_complete_course", cat: "learning", xp: 1200 },
-    { key: "task_body_check", cat: "health", xp: 600 },
-    { key: "task_network", cat: "career", xp: 700 },
-    { key: "task_declutter", cat: "system", xp: 500 },
-    { key: "task_plan_strategy", cat: "planning", xp: 900 }
+  { key: "task_update_portfolio", cat: "career", xp: 1000 },
+  { key: "task_read_book", cat: "reading", xp: 1000 },
+  { key: "task_review_goals", cat: "planning", xp: 500 },
+  { key: "task_analyze_spending", cat: "finance", xp: 800 },
+  { key: "task_complete_course", cat: "learning", xp: 1200 },
+  { key: "task_body_check", cat: "health", xp: 600 },
+  { key: "task_network", cat: "career", xp: 700 },
+  { key: "task_declutter", cat: "system", xp: 500 },
+  { key: "task_plan_strategy", cat: "planning", xp: 900 }
 ];
 
 const PROJECT_ACTIONS = ["action_code_feature", "action_fix_bugs", "action_refactor", "action_write_docs", "action_design_ui", "action_test"];
 const READING_ACTIONS = ["action_read_10_pages", "action_read_30_mins", "action_summarize"];
 
 function getRandomTasks(bank: any[], count: number) {
-    const shuffled = [...bank].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
+  const shuffled = [...bank].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
 }
 
 export async function getDashboardTasks() {
@@ -1029,7 +1037,7 @@ export async function getDashboardTasks() {
 
     const now = new Date();
     const endOfDay = new Date(now); endOfDay.setHours(23, 59, 59, 999);
-    
+
     await Task.deleteMany({ userId: user._id, expiresAt: { $lt: now }, isCompleted: false, type: 'daily' });
 
     const dailyCount = await Task.countDocuments({ userId: user._id, type: 'daily', expiresAt: { $gt: now } });
@@ -1049,140 +1057,140 @@ export async function getDashboardTasks() {
     const endOfYear = new Date(new Date().getFullYear(), 11, 31, 23, 59, 59);
 
     const statsAggregation = await Task.aggregate([
-        { 
-            $match: { 
-                userId: user._id, 
-                isCompleted: true, 
-                updatedAt: { $gte: startOfYear, $lte: endOfYear } 
-            } 
-        },
-        { 
-            $group: { 
-                _id: "$type", 
-                count: { $sum: 1 } 
-            } 
+      {
+        $match: {
+          userId: user._id,
+          isCompleted: true,
+          updatedAt: { $gte: startOfYear, $lte: endOfYear }
         }
+      },
+      {
+        $group: {
+          _id: "$type",
+          count: { $sum: 1 }
+        }
+      }
     ]);
 
-    const goalsCount = await Milestone.countDocuments({ userId: user._id }); 
+    const goalsCount = await Milestone.countDocuments({ userId: user._id });
 
     const yearlyStats = {
-        daily: statsAggregation.find(s => s._id === 'daily')?.count || 0,
-        weekly: statsAggregation.find(s => s._id === 'weekly')?.count || 0,
-        monthly: statsAggregation.find(s => s._id === 'monthly')?.count || 0,
-        goals: goalsCount
+      daily: statsAggregation.find(s => s._id === 'daily')?.count || 0,
+      weekly: statsAggregation.find(s => s._id === 'weekly')?.count || 0,
+      monthly: statsAggregation.find(s => s._id === 'monthly')?.count || 0,
+      goals: goalsCount
     };
 
     return {
-        daily: JSON.parse(JSON.stringify(tasks.filter((t:any) => t.type === 'daily'))),
-        weekly: JSON.parse(JSON.stringify(tasks.filter((t:any) => t.type === 'weekly'))),
-        monthly: JSON.parse(JSON.stringify(tasks.filter((t:any) => t.type === 'monthly'))),
-        yearlyStats 
+      daily: JSON.parse(JSON.stringify(tasks.filter((t: any) => t.type === 'daily'))),
+      weekly: JSON.parse(JSON.stringify(tasks.filter((t: any) => t.type === 'weekly'))),
+      monthly: JSON.parse(JSON.stringify(tasks.filter((t: any) => t.type === 'monthly'))),
+      yearlyStats
     };
 
-  } catch (e) { 
-      console.error(e); 
-      return { daily: [], weekly: [], monthly: [], yearlyStats: { daily: 0, weekly: 0, monthly: 0, goals: 0 } }; 
+  } catch (e) {
+    console.error(e);
+    return { daily: [], weekly: [], monthly: [], yearlyStats: { daily: 0, weekly: 0, monthly: 0, goals: 0 } };
   }
 }
 
 async function generateDailyTasks(user: any, expiresAt: Date) {
-    const newTasks = [];
-    
-    const activePlan = await WorkoutPlan.findOne({ userId: user._id, isActive: true });
-    const startOfDay = new Date(); startOfDay.setHours(0,0,0,0);
-    const workoutDoneToday = await Workout.findOne({ userId: user._id, completedAt: { $gte: startOfDay } });
+  const newTasks = [];
 
-    if (activePlan && !workoutDoneToday) {
-        const dayTitle = activePlan.days[activePlan.currentDayIndex]?.title || `Day ${activePlan.currentDayIndex + 1}`;
-        newTasks.push({ 
-            userId: user._id, 
-            title: `action_workout:${dayTitle}`, 
-            type: 'daily', 
-            category: 'fitness', 
-            xpReward: 150, 
-            sourceId: activePlan._id, 
-            expiresAt 
-        });
-    }
+  const activePlan = await WorkoutPlan.findOne({ userId: user._id, isActive: true });
+  const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
+  const workoutDoneToday = await Workout.findOne({ userId: user._id, completedAt: { $gte: startOfDay } });
 
-    const activeProjects = await Project.find({ userId: user._id, status: 'active' });
-    if (activeProjects.length > 0) {
-        const focusProject = activeProjects.find((p:any) => p.isFocus) || activeProjects[Math.floor(Math.random() * activeProjects.length)];
-        const actionKey = PROJECT_ACTIONS[Math.floor(Math.random() * PROJECT_ACTIONS.length)];
-        
-        newTasks.push({ 
-            userId: user._id, 
-            title: `${actionKey}:${focusProject.title}`, 
-            type: 'daily', 
-            category: 'project', 
-            xpReward: 100, 
-            sourceId: focusProject._id, 
-            expiresAt 
-        });
-    }
+  if (activePlan && !workoutDoneToday) {
+    const dayTitle = activePlan.days[activePlan.currentDayIndex]?.title || `Day ${activePlan.currentDayIndex + 1}`;
+    newTasks.push({
+      userId: user._id,
+      title: `action_workout:${dayTitle}`,
+      type: 'daily',
+      category: 'fitness',
+      xpReward: 150,
+      sourceId: activePlan._id,
+      expiresAt
+    });
+  }
 
-    const readingBook = await Resource.findOne({ userId: user._id, status: 'reading' });
-    if (readingBook) {
-        const actionKey = READING_ACTIONS[Math.floor(Math.random() * READING_ACTIONS.length)];
-        
-        newTasks.push({ 
-            userId: user._id, 
-            title: `${actionKey}:${readingBook.title}`, 
-            type: 'daily', 
-            category: 'reading', 
-            xpReward: 80, 
-            sourceId: readingBook._id, 
-            expiresAt 
-        });
-    }
+  const activeProjects = await Project.find({ userId: user._id, status: 'active' });
+  if (activeProjects.length > 0) {
+    const focusProject = activeProjects.find((p: any) => p.isFocus) || activeProjects[Math.floor(Math.random() * activeProjects.length)];
+    const actionKey = PROJECT_ACTIONS[Math.floor(Math.random() * PROJECT_ACTIONS.length)];
 
-    const needed = Math.max(0, 3 - newTasks.length);
-    if (needed > 0) {
-        const randomBankTasks = getRandomTasks(DAILY_BANK, needed);
-        randomBankTasks.forEach(t => {
-            newTasks.push({ 
-                userId: user._id, 
-                title: t.key, 
-                type: 'daily', 
-                category: t.cat, 
-                xpReward: t.xp, 
-                expiresAt 
-            });
-        });
-    }
+    newTasks.push({
+      userId: user._id,
+      title: `${actionKey}:${focusProject.title}`,
+      type: 'daily',
+      category: 'project',
+      xpReward: 100,
+      sourceId: focusProject._id,
+      expiresAt
+    });
+  }
 
-    if (newTasks.length > 0) await Task.insertMany(newTasks);
+  const readingBook = await Resource.findOne({ userId: user._id, status: 'reading' });
+  if (readingBook) {
+    const actionKey = READING_ACTIONS[Math.floor(Math.random() * READING_ACTIONS.length)];
+
+    newTasks.push({
+      userId: user._id,
+      title: `${actionKey}:${readingBook.title}`,
+      type: 'daily',
+      category: 'reading',
+      xpReward: 80,
+      sourceId: readingBook._id,
+      expiresAt
+    });
+  }
+
+  const needed = Math.max(0, 3 - newTasks.length);
+  if (needed > 0) {
+    const randomBankTasks = getRandomTasks(DAILY_BANK, needed);
+    randomBankTasks.forEach(t => {
+      newTasks.push({
+        userId: user._id,
+        title: t.key,
+        type: 'daily',
+        category: t.cat,
+        xpReward: t.xp,
+        expiresAt
+      });
+    });
+  }
+
+  if (newTasks.length > 0) await Task.insertMany(newTasks);
 }
 
 async function generateWeeklyTasks(user: any, expiresAt: Date) {
-    const selected = getRandomTasks(WEEKLY_BANK, 3);
-    
-    const tasks = selected.map(t => ({
-        userId: user._id,
-        title: t.key,
-        type: 'weekly',
-        category: t.cat,
-        xpReward: t.xp,
-        expiresAt
-    }));
-    
-    await Task.insertMany(tasks);
+  const selected = getRandomTasks(WEEKLY_BANK, 3);
+
+  const tasks = selected.map(t => ({
+    userId: user._id,
+    title: t.key,
+    type: 'weekly',
+    category: t.cat,
+    xpReward: t.xp,
+    expiresAt
+  }));
+
+  await Task.insertMany(tasks);
 }
 
 async function generateMonthlyTasks(user: any, expiresAt: Date) {
-    const selected = getRandomTasks(MONTHLY_BANK, 2);
+  const selected = getRandomTasks(MONTHLY_BANK, 2);
 
-    const tasks = selected.map(t => ({
-        userId: user._id,
-        title: t.key,
-        type: 'monthly',
-        category: t.cat,
-        xpReward: t.xp,
-        expiresAt
-    }));
+  const tasks = selected.map(t => ({
+    userId: user._id,
+    title: t.key,
+    type: 'monthly',
+    category: t.cat,
+    xpReward: t.xp,
+    expiresAt
+  }));
 
-    await Task.insertMany(tasks);
+  await Task.insertMany(tasks);
 }
 
 export async function completeTask(taskId: string) {
@@ -1198,25 +1206,25 @@ export async function completeTask(taskId: string) {
     let newStreakValue = 0;
 
     if (task.type === 'daily') {
-        const user = await User.findById(task.userId);
-        const today = new Date(); today.setHours(0,0,0,0);
-        const lastStreakDate = user.lastStreakDate ? new Date(user.lastStreakDate) : new Date(0); lastStreakDate.setHours(0,0,0,0);
-        
-        if (lastStreakDate.getTime() !== today.getTime()) {
-            const allDailyTasks = await Task.find({ userId: task.userId, type: 'daily', expiresAt: { $gte: today } });
-            const allDone = allDailyTasks.every((t: any) => t.isCompleted);
-            
-            if (allDone) {
-                user.currentStreak = (user.currentStreak || 0) + 1;
-                user.lastStreakDate = new Date();
-                user.xp = (user.xp || 0) + 500; 
-                await user.save();
-                streakUpdated = true;
-                newStreakValue = user.currentStreak;
-            }
+      const user = await User.findById(task.userId);
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const lastStreakDate = user.lastStreakDate ? new Date(user.lastStreakDate) : new Date(0); lastStreakDate.setHours(0, 0, 0, 0);
+
+      if (lastStreakDate.getTime() !== today.getTime()) {
+        const allDailyTasks = await Task.find({ userId: task.userId, type: 'daily', expiresAt: { $gte: today } });
+        const allDone = allDailyTasks.every((t: any) => t.isCompleted);
+
+        if (allDone) {
+          user.currentStreak = (user.currentStreak || 0) + 1;
+          user.lastStreakDate = new Date();
+          user.xp = (user.xp || 0) + 500;
+          await user.save();
+          streakUpdated = true;
+          newStreakValue = user.currentStreak;
         }
+      }
     } else {
-        await addXP(task.xpReward);
+      await addXP(task.xpReward);
     }
 
     revalidatePath("/");
@@ -1232,10 +1240,10 @@ export async function getMilestones() {
   try {
     const user = await getUser();
     if (!user) return [];
-    
+
     // ⚠️ التعديل: أزلنا { isCompleted: false } لنجلب الكل
     const milestones = await Milestone.find({ userId: user._id }).sort({ isCompleted: 1, createdAt: -1 });
-    
+
     return JSON.parse(JSON.stringify(milestones));
   } catch (e) { return []; }
 }
@@ -1246,8 +1254,8 @@ export async function createMilestone(formData: FormData) {
     if (!user) return { success: false };
 
     const rawData = {
-        title: formData.get("title"),
-        steps: formData.get("steps") 
+      title: formData.get("title"),
+      steps: formData.get("steps")
     };
 
     const validation = milestoneSchema.safeParse(rawData);
@@ -1257,40 +1265,40 @@ export async function createMilestone(formData: FormData) {
     let steps = [];
 
     try {
-        const parsedSteps = JSON.parse(stepsString);
-        if (Array.isArray(parsedSteps)) {
-            steps = parsedSteps.map((s: any) => {
-                // 🛡️ تحديد الحد الأقصى: إذا كان الـ XP أكبر من 5000، نرجعه 5000
-                let safeXP = Number(s.xp) || 100;
-                if (safeXP > 5000) safeXP = 5000;
-                if (safeXP < 10) safeXP = 10;
+      const parsedSteps = JSON.parse(stepsString);
+      if (Array.isArray(parsedSteps)) {
+        steps = parsedSteps.map((s: any) => {
+          // 🛡️ تحديد الحد الأقصى: إذا كان الـ XP أكبر من 5000، نرجعه 5000
+          let safeXP = Number(s.xp) || 100;
+          if (safeXP > 5000) safeXP = 5000;
+          if (safeXP < 10) safeXP = 10;
 
-                return {
-                    title: DOMPurify.sanitize(s.title || ""),
-                    xp: safeXP, 
-                    isCompleted: false
-                };
-            });
-        }
+          return {
+            title: DOMPurify.sanitize(s.title || ""),
+            xp: safeXP,
+            isCompleted: false
+          };
+        });
+      }
     } catch (e) {
-        steps = stepsString.split('\n').filter(s => s.trim()).map(s => ({ 
-            title: DOMPurify.sanitize(s.trim()), 
-            isCompleted: false, 
-            xp: 100 
-        }));
+      steps = stepsString.split('\n').filter(s => s.trim()).map(s => ({
+        title: DOMPurify.sanitize(s.trim()),
+        isCompleted: false,
+        xp: 100
+      }));
     }
 
     await Milestone.create({
       userId: user._id,
       title,
-      steps, 
+      steps,
       xpReward: 1000 // مكافأة الإنهاء الكلية
     });
-    
+
     revalidatePath("/");
     return { success: true };
-  } catch (e) { 
-      return { success: false }; 
+  } catch (e) {
+    return { success: false };
   }
 }
 
@@ -1301,51 +1309,51 @@ export async function toggleMilestoneStep(milestoneId: string, stepTitle: string
     if (!milestone) return { success: false };
 
     // العثور على الخطوة
-    const step = milestone.steps.find((s:any) => s.title === stepTitle);
-    
+    const step = milestone.steps.find((s: any) => s.title === stepTitle);
+
     if (step) {
-        // ✅ تبديل الحالة (True/False)
-        step.isCompleted = !step.isCompleted; 
+      // ✅ تبديل الحالة (True/False)
+      step.isCompleted = !step.isCompleted;
     } else {
-        return { success: false, msg: "Step not found" };
+      return { success: false, msg: "Step not found" };
     }
 
     // 🔥🔥 مهم جداً: إجبار المونجو دي بي على معرفة أن المصفوفة تغيرت ليتم الحفظ
     milestone.markModified('steps');
 
     // التحقق من اكتمال المايلستون بالكامل
-    const allDone = milestone.steps.every((s:any) => s.isCompleted);
+    const allDone = milestone.steps.every((s: any) => s.isCompleted);
     let xpAwarded = 0;
 
     // حالة: المايلستون اكتمل الآن لأول مرة
     if (allDone && !milestone.isCompleted) {
-        milestone.isCompleted = true;
-        
-        // حساب مجموع نقاط المهام الفردية
-        const stepsXP = milestone.steps.reduce((acc: number, s: any) => acc + (s.xp || 100), 0);
-        
-        // المكافأة الكلية = مكافأة الإتمام (1000) + مجموع نقاط المهام
-        xpAwarded = (milestone.xpReward || 1000) + stepsXP;
-        
-        await addXP(xpAwarded);
-    } 
+      milestone.isCompleted = true;
+
+      // حساب مجموع نقاط المهام الفردية
+      const stepsXP = milestone.steps.reduce((acc: number, s: any) => acc + (s.xp || 100), 0);
+
+      // المكافأة الكلية = مكافأة الإتمام (1000) + مجموع نقاط المهام
+      xpAwarded = (milestone.xpReward || 1000) + stepsXP;
+
+      await addXP(xpAwarded);
+    }
     // حالة: المستخدم ألغى مهمة، نلغي اكتمال المايلستون
     else if (!allDone && milestone.isCompleted) {
-        milestone.isCompleted = false;
-        // ملاحظة: عادة لا نسحب الـ XP عند الإلغاء لتجنب التعقيد، لكن المايلستون يعود مفتوحاً
+      milestone.isCompleted = false;
+      // ملاحظة: عادة لا نسحب الـ XP عند الإلغاء لتجنب التعقيد، لكن المايلستون يعود مفتوحاً
     }
 
     await milestone.save(); // ✅ الحفظ الفعلي في قاعدة البيانات
     revalidatePath("/");
-    
+
     return { success: true, isCompleted: milestone.isCompleted, xpAwarded };
-  } catch (e) { 
-      console.error(e);
-      return { success: false }; 
+  } catch (e) {
+    console.error(e);
+    return { success: false };
   }
 }
 
 export async function deleteMilestone(id: string) {
-    try { await Milestone.findByIdAndDelete(id); revalidatePath("/"); return { success: true }; } 
-    catch (e) { return { success: false }; }
+  try { await Milestone.findByIdAndDelete(id); revalidatePath("/"); return { success: true }; }
+  catch (e) { return { success: false }; }
 }
