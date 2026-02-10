@@ -1262,7 +1262,7 @@ export async function createMilestone(formData: FormData) {
     if (!validation.success) return { success: false };
 
     const { title, steps: stepsString } = validation.data;
-    let steps = [];
+    let steps: { title: string; xp: number; isCompleted: boolean }[] = [];
 
     try {
       const parsedSteps = JSON.parse(stepsString);
