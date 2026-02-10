@@ -268,7 +268,7 @@ export default function Dashboard({
                     <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
                         <button onClick={toggleLanguage} className="md:hidden w-9 h-9 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white font-bold text-xs">{lang === 'ar' ? 'EN' : 'ع'}</button>
                         <div className="h-auto min-h-[40px] px-3 md:px-4 py-2 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-between md:justify-start gap-3 shadow-inner flex-1 md:flex-none">
-                            <div className="flex items-center gap-1.5 text-orange-500"><Flame size={12} fill="currentColor" /> <span className="text-xs font-bold">{user.currentStreak} <span className="hidden md:inline">{t.streak || "DAY"}</span></span></div>
+                            <div className="flex items-center gap-1.5 text-orange-500"><Flame size={12} fill="currentColor" /> <span className="text-xs font-bold">{user.currentStreak} <span className="hidden md:inline">{t.prof_streak || "DAY"}</span></span></div>
                             <div className="w-px h-4 bg-white/10" />
                             <div className="flex flex-col items-end justify-center min-w-[60px]" title={`${Math.floor(user.xp)} / ${user.xpRequired} XP`}>
                                 <div className="flex items-center gap-1.5 text-yellow-500"><Crown size={12} fill="currentColor" /> <span className="text-xs font-bold flex gap-1 items-center">LVL <HyperCounter value={user.level} className="text-yellow-500" /></span></div>

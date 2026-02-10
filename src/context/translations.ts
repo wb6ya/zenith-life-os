@@ -11,7 +11,7 @@ export const translations = {
     welcome: "هلا والله",
     level: "لفل",
     xp: "خبرة",
-    
+
     nav_home: "الرئيسية",
     nav_fitness: "مركز القوة",
     nav_projects: "المهمات",
@@ -32,7 +32,7 @@ export const translations = {
     // --- 🎛️ Dashboard ---
     dashboard_ops: "العمليات",
     dashboard_mission: "غرفة القيادة اليومية",
-    
+
     // --- 🏆 Tasks & Milestones ---
     tasks_daily: "يومي",
     tasks_weekly: "أسبوعي",
@@ -40,7 +40,7 @@ export const translations = {
     tasks_locked: "مقفلة (لفل 5+)",
     tasks_empty: "أنجزت كل شيء لهذا اليوم، كفو!",
     tasks_complete_label: "المهام المنجزة",
-    
+
     tasks_goals: "الأهداف الحالية",
     tasks_history: "السجل والأرشيف",
     tasks_active_tab: "الحالية",
@@ -89,7 +89,7 @@ export const translations = {
     coach_fire: "ماشاء الله عليك! مولّع، لا توقف!",
     coach_gym: "العضلات ما تطلع وانت جالس. قوم تمرن.",
     coach_read: "غّذ عقلك شوي، اقرأ لك صفحتين.",
-    
+
     coach_new_user: "هلا بك في القمة يا {name}. النظام جاهز. ابدأ بإضافة مشروع.",
     coach_lost_streak: "الراحة جزء من اللعبة يا {name}. المهم نرجع أقوى اليوم.",
     coach_high_streak: "ماشاء الله عليك! {streak} يوم من الاستمرار. وحش!",
@@ -123,13 +123,13 @@ export const translations = {
     quote_5: "لا تدعُ لحياة سهلة، بل ادعُ لقوة تتحمل بها الحياة الصعبة.",
 
     // --- 🏋️ Fitness ---
-    hub_title: "جداول التمرين",
-    hub_subtitle: "ضبط جدولك، رتب أيامك، والتزم.",
-    new_plan_btn: "جدول جديد",
-    no_plans: "ما عندك ولا جدول!",
+    fit_title: "مركز القوة",
+    fit_hub: "الرئيسية",
+    fit_protocols: "البروتوكولات",
+    fit_active_count: "نشط",
     fit_btn_create: "إنشاء خطة",
     fit_loading: "جاري التهيئة...",
-    
+
     fit_new_proto_title: "بروتوكول جديد",
     fit_new_proto_desc: "ابدأ تسلسل تدريبي جديد.",
     fit_label_protocol: "البروتوكول",
@@ -139,7 +139,7 @@ export const translations = {
     fit_label_progress: "التقدم",
     fit_btn_activate: "تفعيل",
     fit_status_working: "قيد التنفيذ",
-    
+
     fit_del_title: "إنهاء البروتوكول؟",
     fit_del_msg: "هذا الإجراء لا رجعة فيه. سيتم فقدان جميع البيانات.",
     fit_cancel: "إلغاء",
@@ -148,7 +148,7 @@ export const translations = {
     fit_input_name: "اسم البروتوكول",
     fit_input_obj: "الهدف",
     fit_btn_submit: "بدء النظام",
-    
+
     fit_ed_exit: "خروج",
     fit_ed_timeline: "الجدول الزمني",
     fit_ed_month: "شهر",
@@ -160,16 +160,16 @@ export const translations = {
     fit_ed_stat_active: "بروتوكول نشط",
     fit_ed_stat_uninit: "غير مهيأ",
     fit_ed_activate: "تفعيل",
-    
+
     fit_ed_proto_title: "عنوان البروتوكول",
     fit_ed_proto_ph: "مثال: تدمير الأرجل والمعدة",
     fit_ed_mode: "الوضع",
     fit_ed_mode_recovery: "استشفاء",
     fit_ed_mode_training: "تمرين",
-    
+
     fit_ed_active_rec: "استشفاء نشط",
     fit_ed_rec_desc: "لا حاجة لرفع الأوزان. ركز على النوم والتغذية.",
-    
+
     fit_ed_ex_name: "اسم التمرين",
     fit_ed_media: "الوسائط",
     fit_ed_link: "رابط",
@@ -182,7 +182,7 @@ export const translations = {
     fit_ed_rest: "راحة (ث)",
     fit_ed_add_module: "إضافة تمرين",
     fit_ed_save_proto: "حفظ البروتوكول",
-    
+
     fit_ed_err_month: "لا يمكن حذف الشهر الوحيد المتبقي.",
     fit_ed_del_cycle_title: "حذف الدورة؟",
     fit_ed_del_cycle_msg: "سيتم مسح جميع البيانات لهذا الشهر.",
@@ -196,7 +196,7 @@ export const translations = {
     fit_ed_act_confirm_title: "تفعيل البروتوكول",
     fit_ed_act_confirm_msg: "سيصبح هذا جدولك اليومي النشط. جاهز؟",
     fit_ed_file_large: "الملف كبير جداً (الحد الأقصى 5 ميجا)",
-    
+
     player_day: "اليوم",
     player_init: "بدء التسلسل",
     player_get_ready: "استعد",
@@ -216,6 +216,7 @@ export const translations = {
     player_resume: "إكمال",
     player_quit: "خروج",
     player_spotify: "رابط سبوتيفاي",
+
 
     // --- 🚀 Projects ---
     projects_title: "منصة الإطلاق",
@@ -241,7 +242,7 @@ export const translations = {
     proj_name: "اسم المشروع",
     proj_desc: "وصف المشروع",
     proj_link: "رابط الموارد",
-    
+
     // Ship Modal
     ship_it: "أطلق المشروع",
     ship_title: "إطلاق المشروع",
@@ -252,7 +253,7 @@ export const translations = {
     ship_repo_ph: "رابط القيت هب",
     ship_demo_ph: "رابط الديمو",
     ship_confirm_btn: "تأكيد الإطلاق",
-    
+
     // Project Modal
     proj_add_title: "بدء البروتوكول",
     proj_add_subtitle: "حدد معايير المهمة الجديدة",
@@ -263,7 +264,7 @@ export const translations = {
     proj_tech_selected: "محدد",
     proj_tech_ph: "ابحث عن تقنية...",
     proj_start_btn: "ابدأ المهمة",
-    
+
     // Toasts (Projects)
     toast_project_added: "تم بدء مهمة جديدة 🚀",
     toast_project_shipped: "تم إطلاق المشروع بنجاح 🌍",
@@ -300,7 +301,7 @@ export const translations = {
     lib_select_shelf: "اختر من الرف",
     lib_add_new: "إضافة",
     lib_pg_short: "ص",
-    
+
     toast_book_added: "تم إضافة الكتاب للأرشيف 📚",
     toast_book_updated: "تم تحديث بيانات الكتاب 🔄",
     toast_book_deleted: "تم حذف الكتاب من الأرشيف 🗑️",
@@ -328,7 +329,7 @@ export const translations = {
     course_self_study: "دراسة ذاتية",
     course_skill_acq: "اكتساب المهارات",
     course_available: "الكورسات المتاحة",
-    
+
     toast_course_added: "تم تهيئة الكورس بنجاح 🎓",
     toast_course_active: "تم تفعيل الكورس 🚀",
     toast_course_completed: "تم الحصول على الشهادة! 🏆",
@@ -359,7 +360,7 @@ export const translations = {
     ent_rating: "التقييم",
     ent_genres: "التصنيف",
     ent_year: "السنة",
-    
+
     toast_ent_added: "تمت الإضافة للمكتبة 🎮",
     toast_ent_active: "جاري التشغيل 🎬",
     toast_ent_paused: "تم الإيقاف مؤقتاً ⏸️",
@@ -370,15 +371,8 @@ export const translations = {
     profile_title: "بطاقة العميل",
     edit_profile: "تعديل الشخصية",
     save_profile: "حفظ الشكل",
-    level: "المستوى",
-    xp: "مجموع الخبرة",
-    streak: "الستريك",
-    stats_workouts: "تمارين",
-    stats_books: "كتب",
-    stats_projects: "مشاريع",
-    tab_overview: "احصائيات",
-    tab_archive: "المخزن",
-    tab_projects: "سجل",
+
+
     prof_id_card: "الهوية",
     prof_lvl: "مستوى",
     prof_xp: "الخبرة",
@@ -393,13 +387,13 @@ export const translations = {
     prof_stat_know: "معرفة",
     prof_stat_skill: "مهارة",
     prof_stat_stam: "تحمل",
-    
+
     badge_iron_will: "إرادة حديدية",
     badge_scholar: "عالم",
     badge_builder: "بناء",
     badge_unstoppable: "لا يُقهر",
     badge_initiate: "مبتدئ",
-    
+
     prof_focus_dist: "توزيع التركيز",
     prof_consist_grid: "شبكة الالتزام",
     prof_last_30: "آخر 30 يوم",
@@ -413,7 +407,7 @@ export const translations = {
     prof_featured: "إنجازات مميزة",
     prof_repo: "المستودع",
     prof_nothing: "الأرشيف فارغ.",
-    
+
     toast_profile_updated: "تم تحديث الهوية بنجاح ✨",
 
     // --- 🚪 Logout ---
@@ -474,7 +468,7 @@ export const translations = {
     task_stretch: "تمارين إطالة 15 دقيقة",
     task_call_family: "اتصل بأحد أفراد العائلة",
     task_organize_files: "رتب الملفات الرقمية",
-    
+
     task_weekly_code_review: "مراجعة الكود الأسبوعية",
     task_long_cardio: "كارديو طويل (45 دقيقة)",
     task_organize_workspace: "نظم مساحة العمل الرقمية",
@@ -493,7 +487,7 @@ export const translations = {
     task_weekly_social_detox_chal: "ديتوكس تواصل اجتماعي (3 أيام)",
     task_weekly_budget_stick: "الالتزام بالميزانية",
     task_weekly_algorithm_mastery: "حل 5 خوارزميات برمجية",
-    
+
     task_update_portfolio: "تحديث معرض الأعمال",
     task_read_book: "قراءة كتاب كامل",
     task_review_goals: "مراجعة أهداف الشهر",
@@ -554,7 +548,7 @@ export const translations = {
     tasks_locked: "LOCKED (LVL 5+)",
     tasks_empty: "All clear, good job.",
     tasks_complete_label: "TASKS COMPLETE",
-    
+
     tasks_goals: "Active Goals",
     tasks_history: "Archive",
     tasks_active_tab: "Active",
@@ -600,7 +594,7 @@ export const translations = {
     coach_fire: "You're on fire! Don't let the flame die.",
     coach_gym: "Muscles don't grow on trees. Go lift.",
     coach_read: "Brain needs food too. Read a page.",
-    
+
     coach_new_user: "Welcome to Zenith, {name}. System online. Start by adding a Project.",
     coach_lost_streak: "Rest is part of the game, {name}. Restart the grind today.",
     coach_high_streak: "You are UNSTOPPABLE! {streak} days of pure discipline.",
@@ -639,7 +633,7 @@ export const translations = {
     fit_active_count: "Active",
     fit_btn_create: "CREATE PLAN",
     fit_loading: "INITIALIZING...",
-    
+
     fit_new_proto_title: "NEW PROTOCOL",
     fit_new_proto_desc: "Initialize a new training sequence.",
     fit_label_protocol: "Protocol",
@@ -649,7 +643,7 @@ export const translations = {
     fit_label_progress: "Progress",
     fit_btn_activate: "ACTIVATE",
     fit_status_working: "IN PROGRESS",
-    
+
     fit_del_title: "TERMINATE PROTOCOL?",
     fit_del_msg: "This action is irreversible. All data associated with this plan will be lost.",
     fit_cancel: "CANCEL",
@@ -658,7 +652,7 @@ export const translations = {
     fit_input_name: "PROTOCOL NAME",
     fit_input_obj: "OBJECTIVE",
     fit_btn_submit: "INITIALIZE SYSTEM",
-    
+
     fit_ed_exit: "EXIT",
     fit_ed_timeline: "TIMELINE",
     fit_ed_month: "MONTH",
@@ -670,16 +664,16 @@ export const translations = {
     fit_ed_stat_active: "ACTIVE PROTOCOL",
     fit_ed_stat_uninit: "UNINITIALIZED",
     fit_ed_activate: "ACTIVATE",
-    
+
     fit_ed_proto_title: "PROTOCOL TITLE",
     fit_ed_proto_ph: "e.g. Legs & Core Destruction",
     fit_ed_mode: "MODE",
     fit_ed_mode_recovery: "RECOVERY",
     fit_ed_mode_training: "TRAINING",
-    
+
     fit_ed_active_rec: "ACTIVE RECOVERY",
     fit_ed_rec_desc: "No heavy lifting required. Focus on sleep and nutrition.",
-    
+
     fit_ed_ex_name: "EXERCISE NAME",
     fit_ed_media: "MEDIA",
     fit_ed_link: "LINK",
@@ -692,7 +686,7 @@ export const translations = {
     fit_ed_rest: "Rest (s)",
     fit_ed_add_module: "ADD MODULE",
     fit_ed_save_proto: "SAVE PROTOCOL",
-    
+
     fit_ed_err_month: "Cannot delete the only remaining month.",
     fit_ed_del_cycle_title: "Delete Cycle?",
     fit_ed_del_cycle_msg: "This will wipe all data for this month. Proceed?",
@@ -706,7 +700,7 @@ export const translations = {
     fit_ed_act_confirm_title: "Activate Protocol",
     fit_ed_act_confirm_msg: "This will be your active daily driver. Ready?",
     fit_ed_file_large: "File too large (Max 5MB)",
-    
+
     player_day: "DAY",
     player_init: "INITIATE SEQUENCE",
     player_get_ready: "GET READY",
@@ -726,7 +720,7 @@ export const translations = {
     player_resume: "RESUME",
     player_quit: "QUIT",
     player_spotify: "SPOTIFY LINK",
-    
+
     projects_title: "MISSION CONTROL",
     projects_sub: "Build. Ship. Legacy.",
     new_proj: "New Project",
@@ -750,7 +744,7 @@ export const translations = {
     proj_name: "Project Name",
     proj_desc: "Description",
     proj_link: "Resource Link",
-    
+
     ship_it: "SHIP IT",
     ship_title: "SHIP PROJECT",
     ship_subtitle: "Prepare for deployment",
@@ -760,7 +754,7 @@ export const translations = {
     ship_repo_ph: "GitHub Repo",
     ship_demo_ph: "Live Demo",
     ship_confirm_btn: "CONFIRM LAUNCH",
-    
+
     proj_add_title: "INITIALIZE PROTOCOL",
     proj_add_subtitle: "Define new mission parameters",
     proj_codename: "Mission Codename",
@@ -770,12 +764,12 @@ export const translations = {
     proj_tech_selected: "SELECTED",
     proj_tech_ph: "Filter technology...",
     proj_start_btn: "START MISSION",
-    
+
     toast_project_added: "New Mission Initialized 🚀",
     toast_project_shipped: "Mission Deployed Successfully 🌍",
     toast_project_active: "Mission Activated 🎯",
     toast_project_inactive: "Mission Standby ⏸️",
-    
+
     library_title: "KNOWLEDGE BASE",
     lib_subtitle: "Knowledge Database",
     reading_now: "UPLOADING TO BRAIN...",
@@ -808,7 +802,7 @@ export const translations = {
     toast_book_added: "Book Added to Archive 📚",
     toast_book_updated: "Book Updated 🔄",
     toast_book_deleted: "Book Removed from Archive 🗑️",
-    
+
     courses_title: "SKILL TREE",
     new_course: "NEW MODULE",
     active_course: "LEARNING...",
@@ -835,7 +829,7 @@ export const translations = {
     toast_course_active: "Module Activated 🚀",
     toast_course_completed: "Certificate Earned! 🏆",
     toast_course_deleted: "Module Deleted 🗑️",
-    
+
     entertainment_title: "MEDIA DECK",
     ent_play: "GAMES",
     ent_watch: "MOVIES",
@@ -865,7 +859,7 @@ export const translations = {
     toast_ent_paused: "Session Paused ⏸️",
     toast_ent_finished: "Completed! +XP Earned 🏆",
     toast_ent_deleted: "Item Removed 🗑️",
-    
+
     profile_title: "OPERATIVE ID",
     edit_profile: "MOD CHARACTER",
     save_profile: "SAVE SKINS",
@@ -874,7 +868,7 @@ export const translations = {
     logout_msg: "You are about to disconnect from the system.",
     logout_confirm: "DISCONNECT",
     logout_cancel: "STAY",
-    
+
     prof_id_card: "IDENTITY",
     prof_lvl: "Level",
     prof_xp: "Total XP",
@@ -908,7 +902,7 @@ export const translations = {
     prof_repo: "Repository",
     prof_nothing: "Nothing found in the archives.",
     toast_profile_updated: "Identity Updated Successfully ✨",
-    
+
     dev_role: "SOFTWARE ENGINEER",
     dev_name: "WB6",
     dev_quote: "Slow and steady wins the race",
@@ -919,7 +913,7 @@ export const translations = {
     dev_stack_title: "MY ARSENAL",
     dev_connect: "ESTABLISH LINK",
     dev_back: "RETURN TO DASHBOARD",
-    
+
     cat_fitness: "Fitness",
     cat_project: "Project",
     cat_reading: "Reading",
@@ -931,7 +925,7 @@ export const translations = {
     cat_general: "General",
     cat_career: "Career",
     cat_planning: "Planning",
-    
+
     action_workout: "Workout",
     action_code_feature: "Code Feature",
     action_fix_bugs: "Fix Bugs in",
@@ -943,7 +937,7 @@ export const translations = {
     action_summarize: "Summarize chapter of",
     action_read_30_mins: "Read 30 mins of",
     action_finish_chapter: "Finish chapter of",
-    
+
     task_plan_tomorrow: "Plan your goals for tomorrow",
     task_drink_water: "Drink 2L of water",
     task_meditate: "Meditate for 10 mins",
@@ -956,7 +950,7 @@ export const translations = {
     task_stretch: "Stretch for 15 mins",
     task_call_family: "Call a family member",
     task_organize_files: "Organize files",
-    
+
     task_weekly_code_review: "Weekly Code Review",
     task_long_cardio: "Long Cardio Session (45m)",
     task_organize_workspace: "Organize Digital Workspace",
@@ -975,7 +969,7 @@ export const translations = {
     task_weekly_social_detox_chal: "Social Media Detox (3 Days)",
     task_weekly_budget_stick: "Stick to Budget (No Impulse Buys)",
     task_weekly_algorithm_mastery: "Solve 5 LeetCode/Algo Problems",
-    
+
     task_update_portfolio: "Update Project Portfolio",
     task_read_book: "Read 1 Full Book",
     task_review_goals: "Review Monthly Goals",
@@ -992,7 +986,7 @@ export const translations = {
     task_monthly_finance_goal: "Save 20% of Income",
     task_monthly_body_goal: "Hit Target Weight/Body Fat",
     task_monthly_network_growth: "Connect with 5 Industry Peers",
-    
+
     cal_sun: "S", cal_mon: "M", cal_tue: "T", cal_wed: "W", cal_thu: "T", cal_fri: "F", cal_sat: "S",
     log_today: "Today",
     log_yesterday: "Yesterday"

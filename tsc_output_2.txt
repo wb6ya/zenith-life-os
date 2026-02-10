@@ -1,0 +1,81 @@
+src/app/fitness/page.tsx(237,33): error TS2322: Type '{ hidden: { y: number; opacity: number; scale: number; }; visible: { y: number; opacity: number; scale: number; transition: { type: string; stiffness: number; damping: number; }; }; }' is not assignable to type 'Variants'.
+  Property 'visible' is incompatible with index signature.
+    Type '{ y: number; opacity: number; scale: number; transition: { type: string; stiffness: number; damping: number; }; }' is not assignable to type 'Variant'.
+      Type '{ y: number; opacity: number; scale: number; transition: { type: string; stiffness: number; damping: number; }; }' is not assignable to type 'TargetAndTransition'.
+        Type '{ y: number; opacity: number; scale: number; transition: { type: string; stiffness: number; damping: number; }; }' is not assignable to type '{ transition?: Transition<any> | undefined; transitionEnd?: ResolvedValues$1 | undefined; }'.
+          Types of property 'transition' are incompatible.
+            Type '{ type: string; stiffness: number; damping: number; }' is not assignable to type 'Transition<any> | undefined'.
+              Type '{ type: string; stiffness: number; damping: number; }' is not assignable to type 'TransitionWithValueOverrides<any>'.
+                Type '{ type: string; stiffness: number; damping: number; }' is not assignable to type 'ValueAnimationTransition<any>'.
+                  Types of property 'type' are incompatible.
+                    Type 'string' is not assignable to type 'AnimationGeneratorType | undefined'.
+src/app/fitness/page.tsx(257,41): error TS2322: Type '{ hidden: { y: number; opacity: number; scale: number; }; visible: { y: number; opacity: number; scale: number; transition: { type: string; stiffness: number; damping: number; }; }; }' is not assignable to type 'Variants'.
+  Property 'visible' is incompatible with index signature.
+    Type '{ y: number; opacity: number; scale: number; transition: { type: string; stiffness: number; damping: number; }; }' is not assignable to type 'Variant'.
+      Type '{ y: number; opacity: number; scale: number; transition: { type: string; stiffness: number; damping: number; }; }' is not assignable to type 'TargetAndTransition'.
+        Type '{ y: number; opacity: number; scale: number; transition: { type: string; stiffness: number; damping: number; }; }' is not assignable to type '{ transition?: Transition<any> | undefined; transitionEnd?: ResolvedValues$1 | undefined; }'.
+          Types of property 'transition' are incompatible.
+            Type '{ type: string; stiffness: number; damping: number; }' is not assignable to type 'Transition<any> | undefined'.
+              Type '{ type: string; stiffness: number; damping: number; }' is not assignable to type 'TransitionWithValueOverrides<any>'.
+                Type '{ type: string; stiffness: number; damping: number; }' is not assignable to type 'ValueAnimationTransition<any>'.
+                  Types of property 'type' are incompatible.
+                    Type 'string' is not assignable to type 'AnimationGeneratorType | undefined'.
+src/app/fitness/player/page.tsx(151,21): error TS2322: Type '{ initial: { opacity: number; scale: number; }; animate: { opacity: number; scale: number; transition: { duration: number; ease: string; }; }; exit: { opacity: number; scale: number; transition: { duration: number; }; }; }' is not assignable to type 'Variants'.
+  Property 'animate' is incompatible with index signature.
+    Type '{ opacity: number; scale: number; transition: { duration: number; ease: string; }; }' is not assignable to type 'Variant'.
+      Type '{ opacity: number; scale: number; transition: { duration: number; ease: string; }; }' is not assignable to type 'TargetAndTransition'.
+        Type '{ opacity: number; scale: number; transition: { duration: number; ease: string; }; }' is not assignable to type '{ transition?: Transition<any> | undefined; transitionEnd?: ResolvedValues$1 | undefined; }'.
+          Types of property 'transition' are incompatible.
+            Type '{ duration: number; ease: string; }' is not assignable to type 'Transition<any> | undefined'.
+              Type '{ duration: number; ease: string; }' is not assignable to type 'TransitionWithValueOverrides<any>'.
+                Type '{ duration: number; ease: string; }' is not assignable to type 'ValueAnimationTransition<any>'.
+                  Types of property 'ease' are incompatible.
+                    Type 'string' is not assignable to type 'Easing | Easing[] | undefined'.
+src/app/fitness/player/page.tsx(177,21): error TS2322: Type '{ initial: { opacity: number; scale: number; }; animate: { opacity: number; scale: number; transition: { duration: number; ease: string; }; }; exit: { opacity: number; scale: number; transition: { duration: number; }; }; }' is not assignable to type 'Variants'.
+  Property 'animate' is incompatible with index signature.
+    Type '{ opacity: number; scale: number; transition: { duration: number; ease: string; }; }' is not assignable to type 'Variant'.
+      Type '{ opacity: number; scale: number; transition: { duration: number; ease: string; }; }' is not assignable to type 'TargetAndTransition'.
+        Type '{ opacity: number; scale: number; transition: { duration: number; ease: string; }; }' is not assignable to type '{ transition?: Transition<any> | undefined; transitionEnd?: ResolvedValues$1 | undefined; }'.
+          Types of property 'transition' are incompatible.
+            Type '{ duration: number; ease: string; }' is not assignable to type 'Transition<any> | undefined'.
+              Type '{ duration: number; ease: string; }' is not assignable to type 'TransitionWithValueOverrides<any>'.
+                Type '{ duration: number; ease: string; }' is not assignable to type 'ValueAnimationTransition<any>'.
+                  Types of property 'ease' are incompatible.
+                    Type 'string' is not assignable to type 'Easing | Easing[] | undefined'.
+src/app/fitness/player/page.tsx(233,22): error TS2322: Type '{ children: Element[]; className: string; initial: { opacity: number; scale: number; }; animate: { opacity: number; scale: number; transition: { duration: number; ease: string; }; }; exit: { opacity: number; scale: number; transition: { ...; }; }; key: string; }' is not assignable to type 'Omit<HTMLMotionProps<"div">, "ref">'.
+  Types of property 'animate' are incompatible.
+    Type '{ opacity: number; scale: number; transition: { duration: number; ease: string; }; }' is not assignable to type 'boolean | TargetAndTransition | VariantLabels | LegacyAnimationControls | undefined'.
+      Type '{ opacity: number; scale: number; transition: { duration: number; ease: string; }; }' is not assignable to type 'TargetAndTransition'.
+        Type '{ opacity: number; scale: number; transition: { duration: number; ease: string; }; }' is not assignable to type '{ transition?: Transition<any> | undefined; transitionEnd?: ResolvedValues$1 | undefined; }'.
+          Types of property 'transition' are incompatible.
+            Type '{ duration: number; ease: string; }' is not assignable to type 'Transition<any> | undefined'.
+              Type '{ duration: number; ease: string; }' is not assignable to type 'TransitionWithValueOverrides<any>'.
+                Type '{ duration: number; ease: string; }' is not assignable to type 'ValueAnimationTransition<any>'.
+                  Types of property 'ease' are incompatible.
+                    Type 'string' is not assignable to type 'Easing | Easing[] | undefined'.
+src/app/page.tsx(88,9): error TS2322: Type '{ user: any; projects: any; resources: any; courses: any; entertainment: any; tasks: any; milestones: any; yearlyStats: any; isWorkoutDone: boolean; hasActivePlan: any; }' is not assignable to type 'IntrinsicAttributes & DashboardProps'.
+  Property 'yearlyStats' does not exist on type 'IntrinsicAttributes & DashboardProps'.
+src/app/profile/page.tsx(258,28): error TS2339: Property 'prof_tab_perf' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/app/profile/page.tsx(262,28): error TS2339: Property 'prof_tab_vault' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/app/profile/page.tsx(323,64): error TS2339: Property 'active' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Courses.tsx(202,126): error TS2339: Property 'desc_label' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Courses.tsx(234,71): error TS2339: Property 'link_label' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Courses.tsx(237,93): error TS2339: Property 'complete' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Courses.tsx(252,82): error TS2339: Property 'delete_confirm_title' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Courses.tsx(253,74): error TS2339: Property 'delete_confirm_msg' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Entertainment.tsx(113,30): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+src/components/dashboard/Entertainment.tsx(116,26): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+src/components/dashboard/Entertainment.tsx(439,157): error TS2339: Property 'loading' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Entertainment.tsx(455,80): error TS2339: Property 'delete_confirm_title' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Fitness.tsx(64,26): error TS2551: Property 'fitness_title' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'. Did you mean 'fit_title'?
+src/components/dashboard/Fitness.tsx(86,80): error TS2339: Property 'no_plan' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Fitness.tsx(89,53): error TS2339: Property 'btn_create' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Fitness.tsx(97,74): error TS2339: Property 'empty_plan' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Fitness.tsx(105,101): error TS2339: Property 'plan_done' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Fitness.tsx(108,58): error TS2339: Property 'btn_reset_plan' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Fitness.tsx(119,91): error TS2339: Property 'day_done' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/Library.tsx(57,25): error TS2551: Property 'toast_book_started' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'. Did you mean 'toast_book_added'?
+src/components/dashboard/Library.tsx(82,25): error TS2551: Property 'toast_book_finished' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'. Did you mean 'toast_ent_finished'?
+src/components/dashboard/Library.tsx(229,121): error TS2339: Property 'lib_no_notes' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/TaskCenter.tsx(332,80): error TS2339: Property 'tasks_completed_on' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.
+src/components/dashboard/TaskCenter.tsx(454,271): error TS2339: Property 'tasks_step_ph' does not exist on type '{ back: string; save: string; loading_dots: string; confirm: string; cancel: string; delete: string; system_name: string; welcome: string; level: string; xp: string; nav_home: string; nav_fitness: string; ... 436 more ...; log_yesterday: string; }'.

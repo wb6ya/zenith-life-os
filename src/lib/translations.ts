@@ -110,7 +110,7 @@ export const translations = {
     set: "جولة",
     of: "من",
     resting: "ريح شوي",
-    active: "ادعس",
+    player_active: "ادعس",
     rest_title: "خذ نفس",
     up_next: "الجاي",
     skip: "سكيپ",
@@ -161,7 +161,7 @@ export const translations = {
     mark_done: "تسليم المشروع",
     open_link: "فتح المصدر",
   },
-  
+
   en: {
     // --- General / Dashboard ---
     system_name: "ZENITH",
@@ -273,7 +273,7 @@ export const translations = {
     set: "Set",
     of: "Of",
     resting: "Chill",
-    active: "Push",
+    player_active: "Push",
     rest_title: "Breathe",
     up_next: "Next",
     skip: "Skip",
