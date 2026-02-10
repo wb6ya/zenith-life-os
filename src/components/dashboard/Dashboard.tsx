@@ -157,12 +157,12 @@ const LogoutModal = ({ isOpen, onClose, t, lang }: any) => {
 };
 
 interface DashboardProps {
-    user: any; projects: any[]; resources: any[]; courses: any[]; entertainment: any[]; tasks: any; milestones: any[]; isWorkoutDone: boolean; hasActivePlan: any;
+    user: any; projects: any[]; resources: any[]; courses: any[]; entertainment: any[]; tasks: any; milestones: any[]; yearlyStats: any; isWorkoutDone: boolean; hasActivePlan: any;
 }
 
 export default function Dashboard({
     user, projects, resources, courses, entertainment, tasks,
-    milestones, isWorkoutDone, hasActivePlan
+    milestones, yearlyStats, isWorkoutDone, hasActivePlan
 }: DashboardProps) {
     const router = useRouter();
     let langContext;

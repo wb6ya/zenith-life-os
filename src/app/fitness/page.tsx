@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import {
     Plus, Trash2, Edit, Play, Loader2,
     Activity, X, ArrowRight, Home, Calendar, CheckCircle2, Zap, RefreshCw,
@@ -14,7 +14,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import useSound from "use-sound";
 
 // --- Animation Variants ---
-const containerVariants = {
+const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
@@ -22,7 +22,7 @@ const containerVariants = {
     }
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
     hidden: { y: 20, opacity: 0, scale: 0.95 },
     visible: {
         y: 0, opacity: 1, scale: 1,
@@ -30,11 +30,11 @@ const cardVariants = {
     }
 };
 
-const modalVar = {
+const modalVar: Variants = {
     hidden: { opacity: 0, scale: 0.95, y: 10 },
     visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", bounce: 0.3 } },
     exit: { opacity: 0, scale: 0.95, y: 10 }
-} as const;
+};
 
 export default function FitnessHub() {
     const router = useRouter();
