@@ -34,7 +34,7 @@ const modalVar = {
     hidden: { opacity: 0, scale: 0.95, y: 10 },
     visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", bounce: 0.3 } },
     exit: { opacity: 0, scale: 0.95, y: 10 }
-};
+} as const;
 
 export default function FitnessHub() {
     const router = useRouter();
@@ -261,8 +261,8 @@ export default function FitnessHub() {
                                         key={plan._id}
                                         onClick={() => { playClick(); router.push(`/fitness/editor/${plan._id}`); }}
                                         className={`group relative p-8 rounded-[32px] border transition-all duration-500 cursor-pointer overflow-hidden flex flex-col justify-between min-h-[360px] shadow-2xl ${plan.isActive
-                                                ? 'bg-[#080808] border-green-500/40 shadow-[0_0_40px_-10px_rgba(34,197,94,0.1)]'
-                                                : 'bg-[#0A0A0A] border-white/5 hover:border-white/10 hover:bg-[#0E0E0E]'
+                                            ? 'bg-[#080808] border-green-500/40 shadow-[0_0_40px_-10px_rgba(34,197,94,0.1)]'
+                                            : 'bg-[#0A0A0A] border-white/5 hover:border-white/10 hover:bg-[#0E0E0E]'
                                             }`}
                                     >
                                         {/* Active Glow Effect */}
@@ -279,8 +279,8 @@ export default function FitnessHub() {
                                         <div className="relative z-10">
                                             <div className="flex items-center gap-4 mb-6">
                                                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${plan.isActive
-                                                        ? 'bg-green-500/10 text-green-500 border border-green-500/20'
-                                                        : 'bg-white/5 text-gray-400 group-hover:text-white border border-white/5'
+                                                    ? 'bg-green-500/10 text-green-500 border border-green-500/20'
+                                                    : 'bg-white/5 text-gray-400 group-hover:text-white border border-white/5'
                                                     }`}>
                                                     {plan.isActive ? <Activity size={26} /> : <Dumbbell size={26} />}
                                                 </div>
