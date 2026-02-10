@@ -162,7 +162,7 @@ interface DashboardProps {
 
 export default function Dashboard({
     user, projects, resources, courses, entertainment, tasks,
-    milestones, yearlyStats, isWorkoutDone, hasActivePlan
+    milestones, yearlyStats: _yearlyStats, isWorkoutDone, hasActivePlan
 }: DashboardProps) {
     const router = useRouter();
     let langContext;
@@ -321,7 +321,7 @@ export default function Dashboard({
                                     <button onClick={() => setActivePanel(null)} className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all"><X size={16} /></button>
                                 </div>
                                 <div className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-8">
-                                    {activePanel === 'fitness' && <Fitness user={user} isWorkoutDone={isWorkoutDone} hasActivePlan={hasActivePlan} />}
+                                    {activePanel === 'fitness' && <Fitness isWorkoutDone={isWorkoutDone} hasActivePlan={hasActivePlan} />}
                                     {activePanel === 'projects' && <Projects projects={projects} />}
                                     {activePanel === 'library' && <Library resources={resources} />}
                                     {activePanel === 'courses' && <Courses courses={courses} />}

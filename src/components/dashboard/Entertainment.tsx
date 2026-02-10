@@ -41,6 +41,7 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
 
     // Search & Loading States
     const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [searchQuery, setSearchQuery] = useState("");
     const [isSearching, setIsSearching] = useState(false);
     const [isLoadingDetails, setIsLoadingDetails] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -84,6 +85,7 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
     // Handlers
     const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const query = e.target.value;
+        setSearchQuery(query);
         if (searchTimeout.current) clearTimeout(searchTimeout.current);
         if (query.length < 2) { setSearchResults([]); setIsSearching(false); return; } // Reduced length to 2 for Arabic
 
@@ -366,6 +368,7 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
                                     <Search className={`absolute top-3.5 text-gray-500 ${lang === 'ar' ? 'right-4' : 'left-4'}`} size={18} />
                                     <input
                                         ref={inputRef}
+                                        value={searchQuery}
                                         onChange={handleSearchInput}
                                         placeholder={getSearchPlaceholder(activeTab)}
                                         className={`w-full bg-black/30 border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-pink-500 transition-colors ${lang === 'ar' ? 'pr-12' : 'pl-12'}`}
@@ -391,7 +394,7 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
                                             <div className="flex items-center text-pink-500 opacity-0 group-hover:opacity-100 transition-opacity"><Plus size={20} /></div>
                                         </motion.div>
                                     ))}
-                                    {!isSearching && searchResults.length === 0 && inputRef.current && inputRef.current.value.length > 2 && <p className="text-center text-gray-600 text-xs py-10">{txt.ent_no_results || "No safe results found."}</p>}
+                                    {!isSearching && searchResults.length === 0 && searchQuery.length > 2 && <p className="text-center text-gray-600 text-xs py-10">{txt.ent_no_results || "No safe results found."}</p>}
                                 </div>
                             </motion.div>
                         </motion.div>
