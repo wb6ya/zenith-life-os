@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import {
     ChevronLeft, Terminal, Cpu, Zap, Globe,
     Github, Instagram, Linkedin, Code
@@ -72,7 +71,7 @@ export default function ManifestoPage() {
                             <div className="relative aspect-[4/5] bg-[#0A0A0A] rounded-[38px] overflow-hidden border border-white/10 shadow-2xl">
                                 {/* Image */}
                                 <div className="absolute inset-0">
-                                    <Image src={MY_IMAGE} alt="Developer" fill className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" />
+                                    <img src={MY_IMAGE} alt="Developer" className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
                                 </div>
 
