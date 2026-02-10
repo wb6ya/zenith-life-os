@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       {/* رابط الخطوط الماينكرافتية */}
       <head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/icon.png" />
         <link href="https://fonts.googleapis.com/css2?family=VT323&family=Changa:wght@500;700;800&display=swap" rel="stylesheet" />
       </head>
       <body className={inter.className} suppressHydrationWarning>

@@ -235,7 +235,7 @@ export default function Dashboard({
             <motion.nav initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2, type: "spring" }} className="fixed z-50 backdrop-blur-2xl bg-[#0A0A0A]/80 border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] bottom-4 left-4 right-4 h-20 rounded-[32px] flex flex-row items-center justify-between px-6 md:left-6 md:top-6 md:bottom-6 md:w-24 md:h-auto md:flex-col md:py-8 md:justify-start md:rounded-[40px]">
                 <div className="hidden md:block mb-10 cursor-pointer group relative" onClick={() => router.push('/manifesto')}>
                     <div className="absolute inset-0 bg-cyan-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#151515] to-black border border-white/10 rounded-2xl flex items-center justify-center relative z-10 group-hover:border-cyan-500/50 transition-colors"><Zap size={24} className="text-white group-hover:text-cyan-400 transition-colors" fill="currentColor" /></div>
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#151515] to-black border border-white/10 rounded-2xl flex items-center justify-center relative z-10 group-hover:border-cyan-500/50 transition-colors"><img src="./icon.png" alt="" /></div>
                 </div>
                 <div className="flex flex-1 md:flex-col items-center justify-between md:justify-center gap-1 md:gap-6 w-full">
                     {navItems.map((item) => (
