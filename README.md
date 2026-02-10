@@ -1,6 +1,6 @@
 # 🌌 ZENITH - Gamified Life Operating System
 
-![Project Banner](https://via.placeholder.com/1200x600/0a0a0a/3b82f6?text=ZENITH+LIFE+OS)
+![Project Banner](./public/icon.png)
 
 > **"Turn your life into a game. Build habits, track fitness, and ship projects."**
 
