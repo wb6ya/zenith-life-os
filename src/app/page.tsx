@@ -13,7 +13,7 @@ import Course from "@/models/Course";
 import Entertainment from "@/models/Entertainment";
 
 // Actions
-import { getDashboardTasks, getMilestones } from "./actions"; // ✅ استدعاء getMilestones
+import { getDashboardTasks, getMilestones } from "./actions";
 
 import Dashboard from "@/components/dashboard/Dashboard";
 
@@ -31,7 +31,7 @@ export default async function Home() {
   const today = new Date(); 
   today.setHours(0,0,0,0);
 
-  // 🚀 جلب كل البيانات دفعة واحدة
+  // 🚀 جلب كل البيانات دفعة واحدة لتقليل وقت التحميل
   const [
     projectsData,
     resourcesData,
@@ -39,8 +39,8 @@ export default async function Home() {
     entData,
     activePlanData,
     workoutTodayData,
-    tasksData,
-    milestonesData // ✅
+    tasksAllData, // يحتوي على المهام + الإحصائيات السنوية
+    milestonesData
   ] = await Promise.all([
     Project.find({ userId, status: 'active' }).sort({ createdAt: -1 }).lean(),
     Resource.find({ userId }).sort({ lastUpdated: -1 }).lean(),
@@ -48,24 +48,29 @@ export default async function Home() {
     Entertainment.find({ userId }).sort({ createdAt: -1 }).lean(),
     WorkoutPlan.findOne({ userId, isActive: true }).lean(),
     Workout.findOne({ userId, completedAt: { $gte: today } }).lean(),
-    getDashboardTasks(),
-    getMilestones() // ✅
+    getDashboardTasks(), // تأكد أن هذه الدالة في actions.ts ترجع yearlyStats
+    getMilestones()
   ]);
 
-  // Serialization
+  // Serialization (تحويل البيانات إلى JSON لتجنب مشاكل Next.js)
   const user = JSON.parse(JSON.stringify(userData));
   const projects = JSON.parse(JSON.stringify(projectsData));
   const resources = JSON.parse(JSON.stringify(resourcesData));
   const courses = JSON.parse(JSON.stringify(coursesData));
   const entertainment = JSON.parse(JSON.stringify(entData));
-  const tasks = JSON.parse(JSON.stringify(tasksData));
-  const milestones = JSON.parse(JSON.stringify(milestonesData)); // ✅
+  const milestones = JSON.parse(JSON.stringify(milestonesData));
   
+  // معالجة بيانات المهام والإحصائيات
+  const tasksResult = JSON.parse(JSON.stringify(tasksAllData));
+  const yearlyStats = tasksResult.yearlyStats || { daily: 0, weekly: 0, monthly: 0, goals: 0 };
+
+  // معالجة خطة التمرين
   let activePlan = activePlanData ? JSON.parse(JSON.stringify(activePlanData)) : null;
   if (activePlan && activePlan.days) {
       activePlan.currentDay = activePlan.days[activePlan.currentDayIndex || 0] || null;
   }
 
+  // قيم افتراضية للمستخدم
   user.xp = user.xp || 0;
   user.xpRequired = user.xpRequired || 100;
   user.level = user.level || 1;
@@ -78,8 +83,9 @@ export default async function Home() {
         resources={resources} 
         courses={courses}
         entertainment={entertainment}
-        tasks={tasks}
-        milestones={milestones} // ✅ تمرير المايلستون
+        tasks={tasksResult} // يحتوي على daily, weekly, monthly
+        milestones={milestones}
+        yearlyStats={yearlyStats} // ✅ تمرير الإحصائيات السنوية بشكل صريح
         isWorkoutDone={!!workoutTodayData}
         hasActivePlan={activePlan}
     />

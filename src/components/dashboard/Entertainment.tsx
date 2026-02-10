@@ -20,6 +20,7 @@ import {
 } from "@/app/actions";
 import useSound from "use-sound";
 import { useLanguage } from "@/context/LanguageContext";
+import { toast } from "sonner"; // ✅ استيراد التوست
 
 export default function Entertainment({ items: initialItems }: { items: any[] }) {
   const router = useRouter();
@@ -84,10 +85,11 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
       const query = e.target.value;
       if (searchTimeout.current) clearTimeout(searchTimeout.current);
-      if (query.length < 3) { setSearchResults([]); setIsSearching(false); return; }
+      if (query.length < 2) { setSearchResults([]); setIsSearching(false); return; } // Reduced length to 2 for Arabic
 
       setIsSearching(true);
       searchTimeout.current = setTimeout(async () => {
+          // ✅ تمرير اللغة (lang) للسيرفر ليدعم البحث بالعربي إذا كانت الواجهة عربية أو النص عربي
           const res = await searchEntertainment(query, activeTab, lang);
           if (res.success) {
               const safeResults = res.results.filter(isContentSafe);
@@ -101,11 +103,12 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
       playClick();
       setPreviewItem({ ...result, loading: true });
       setIsLoadingDetails(true);
+      // ✅ تمرير اللغة لجلب التفاصيل بالعربي إن وجدت
       const detailsRes = await getEntertainmentDetails(result.apiId, activeTab, lang);
       if (detailsRes.success) {
           if (!isContentSafe(detailsRes.details)) {
               setPreviewItem(null);
-              alert(txt.ent_safety_msg || "Content flagged by safety protocol.");
+              toast.error(txt.ent_safety_msg || "Content flagged by safety protocol.");
           } else {
               setPreviewItem(prev => ({ ...prev, ...detailsRes.details, loading: false }));
           }
@@ -135,6 +138,12 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
           setIsAddOpen(false);
           setSearchResults([]);
           if(inputRef.current) inputRef.current.value = "";
+          
+          // ✅ توست الإضافة
+          toast.success(txt.toast_ent_added || "Added to Library 🎮", {
+            style: { background: "#101010", color: "#fff", border: "1px solid #333" }
+          });
+
           router.refresh();
       }
   };
@@ -146,6 +155,12 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
           return { ...i, status: i._id === id ? 'active' : 'pending' };
       });
       setItems(updated);
+      
+      // ✅ توست التفعيل
+      toast.success(txt.toast_ent_active || "Now Playing 🎬", {
+        style: { background: "#db2777", color: "#fff", border: "1px solid #be185d" } // Pink theme
+      });
+
       await setActiveEntertainment(id, activeTab);
       router.refresh();
   };
@@ -154,6 +169,10 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
       playClick();
       const updated = items.map(i => i.status === 'active' ? { ...i, status: 'pending' } : i);
       setItems(updated);
+      
+      // ✅ توست الإيقاف
+      toast(txt.toast_ent_paused || "Session Paused ⏸️");
+
       await pauseEntertainment();
       router.refresh();
   };
@@ -162,6 +181,12 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
       playSuccess();
       const updated = items.map(i => i._id === id ? { ...i, status: 'completed' } : i);
       setItems(updated);
+      
+      // ✅ توست الإنهاء (ذهبي)
+      toast.success(txt.toast_ent_finished || "Completed! +XP Earned 🏆", {
+        style: { background: "#ca8a04", color: "#fff", border: "1px solid #eab308" }
+      });
+
       await finishEntertainment(id);
       router.refresh();
   };
@@ -171,8 +196,15 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
       playDelete();
       const updated = items.filter(i => i._id !== deleteId);
       setItems(updated);
+      
       await deleteEntertainment(deleteId);
       setDeleteId(null);
+      
+      // ✅ توست الحذف
+      toast(txt.toast_ent_deleted || "Item Removed 🗑️", {
+          style: { border: '1px solid #ef4444', color: '#fca5a5' }
+      });
+
       router.refresh();
   };
 
@@ -183,21 +215,18 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
       return <Book size={18}/>;
   };
 
-  // ✅ دالة لجلب عنوان الزر الصحيح (إضافة لعبة، إضافة فيلم...)
   const getAddLabel = (type: string) => {
       if(type === 'game') return txt.ent_add_game || "ADD GAME";
       if(type === 'movie') return txt.ent_add_movie || "ADD MOVIE";
       return txt.ent_add_manga || "ADD MANGA";
   };
 
-  // ✅ دالة لجلب نص البحث الصحيح (ابحث عن لعبة...)
   const getSearchPlaceholder = (type: string) => {
       if(type === 'game') return txt.ent_search_game || "Search games...";
       if(type === 'movie') return txt.ent_search_movie || "Search movies...";
       return txt.ent_search_manga || "Search manga...";
   };
 
-  // ✅ دالة لعنوان التاب فقط
   const getTabLabel = (type: string) => {
       if(type === 'game') return txt.ent_play || "GAMES";
       if(type === 'movie') return txt.ent_watch || "MOVIES";
@@ -256,10 +285,10 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
                           </div>
                           <div className="flex gap-2 mt-auto">
                               <button onClick={(e) => { e.stopPropagation(); handleFinish(activeItem._id); }} className="px-4 py-2 bg-green-500 hover:bg-green-400 text-black font-bold rounded-xl text-[10px] transition-colors flex items-center gap-1 shadow-lg">
-                                <CheckCircle size={12}/> {txt.finish || "COMPLETE"}
+                                  <CheckCircle size={12}/> {txt.finish || "COMPLETE"}
                               </button>
                               <button onClick={(e) => { e.stopPropagation(); handlePause(); }} className="p-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors backdrop-blur-md border border-white/10">
-                                <Pause size={14} fill="currentColor"/>
+                                  <Pause size={14} fill="currentColor"/>
                               </button>
                           </div>
                       </div>
@@ -320,7 +349,6 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500" />
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-black text-white flex items-center gap-2">
-                                {/* ✅ تم استخدام العنوان الصحيح الآن */}
                                 {getIcon(activeTab)} {getAddLabel(activeTab)}
                             </h3>
                             <button onClick={() => { setIsAddOpen(false); setSearchResults([]); }} className="p-2 bg-white/5 rounded-full hover:text-white text-gray-500"><X size={18}/></button>
@@ -335,16 +363,15 @@ export default function Entertainment({ items: initialItems }: { items: any[] })
                         </div>
 
                         <div className="relative mb-6">
-                            <Search className="absolute left-4 top-3.5 text-gray-500" size={18}/>
+                            <Search className={`absolute top-3.5 text-gray-500 ${lang === 'ar' ? 'right-4' : 'left-4'}`} size={18}/>
                             <input 
                                 ref={inputRef} 
                                 onChange={handleSearchInput} 
-                                // ✅ تم استخدام البليس هولدر الصحيح
                                 placeholder={getSearchPlaceholder(activeTab)} 
-                                className="w-full bg-black/30 border border-white/10 p-3.5 pl-12 rounded-xl text-white outline-none focus:border-pink-500 transition-colors" 
+                                className={`w-full bg-black/30 border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-pink-500 transition-colors ${lang === 'ar' ? 'pr-12' : 'pl-12'}`} 
                                 autoFocus 
                             />
-                            {isSearching && <Loader2 className="absolute right-4 top-3.5 text-pink-500 animate-spin" size={18}/>}
+                            {isSearching && <Loader2 className={`absolute top-3.5 text-pink-500 animate-spin ${lang === 'ar' ? 'left-4' : 'right-4'}`} size={18}/>}
                         </div>
 
                         <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 p-1">

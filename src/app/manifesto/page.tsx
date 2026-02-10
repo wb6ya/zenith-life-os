@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { 
   ChevronLeft, Terminal, Cpu, Zap, Globe, 
-  Github, Twitter, Linkedin, Mail, Code
+  Github, Instagram, Linkedin, Mail, Code
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -18,14 +18,14 @@ export default function ManifestoPage() {
 
   // 🔗 ضع روابط حساباتك هنا
   const SOCIALS = [
-    { icon: Twitter, link: "https://twitter.com/yourhandle", label: "Twitter" },
-    { icon: Github, link: "https://github.com/yourhandle", label: "GitHub" },
-    { icon: Linkedin, link: "https://linkedin.com/in/yourhandle", label: "LinkedIn" },
-    { icon: Globe, link: "https://yourwebsite.com", label: "Website" },
+    { icon: Instagram, link: "https://www.instagram.com/wb6ya/", label: "Twitter" },
+    { icon: Github, link: "https://github.com/wb6ya", label: "GitHub" },
+    { icon: Linkedin, link: "https://www.linkedin.com/in/abdulaziz-bafarag-2926a62a6/", label: "LinkedIn" },
+    //{ icon: Globe, link: "https://yourwebsite.com", label: "Website" },
   ];
 
   // 🛠️ التقنيات التي تتقنها
-  const STACK = ["Next.js", "React", "TypeScript", "Tailwind", "Node.js", "MongoDB"];
+  const STACK = ["Node.js", "MongoDB", "Express", "TypeScript", "Nest.js", "React"];
 
   // Animation Variants
   const containerVar = {
@@ -39,7 +39,7 @@ export default function ManifestoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white font-sans overflow-y-auto selection:bg-cyan-500/30 pb-20" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-[#020202] text-white font-sans overflow-y-hidden selection:bg-cyan-500/30 pb-20" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       
       {/* 🌌 Background FX */}
       <div className="fixed inset-0 bg-[url('/grid.svg')] opacity-[0.03] pointer-events-none" />

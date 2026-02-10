@@ -15,6 +15,7 @@ import { createNewProject, deleteProject, shipProject, setProjectFocus, unsetPro
 import useSound from "use-sound";
 import { useLanguage } from "@/context/LanguageContext";
 import AddProjectModal from "./AddProjectModal"; 
+import { toast } from "sonner"; // ✅ استيراد التوست
 
 // Helper to map icons for list view
 const TECH_ICONS: any = {
@@ -57,6 +58,13 @@ export default function Projects({ projects: initialProjects }: { projects: any[
       const newProjects = projects.map(p => ({ ...p, isFocus: p._id === id })); 
       setProjects(newProjects); 
       await setProjectFocus(id); 
+      
+      // ✅ توست التفعيل (لون نيلي يناسب الثيم)
+      toast.success(txt.toast_project_active || "Mission Activated 🎯", {
+        position: "bottom-center",
+        style: { background: "#1e1b4b", color: "#c7d2fe", border: "1px solid #4338ca" }
+      });
+
       router.refresh(); 
   };
   
@@ -65,14 +73,26 @@ export default function Projects({ projects: initialProjects }: { projects: any[
       const newProjects = projects.map(p => ({ ...p, isFocus: false })); 
       setProjects(newProjects); 
       await unsetProjectFocus(id); 
+      
+      // ✅ توست إلغاء التفعيل (لون رمادي هادئ)
+      toast(txt.toast_project_inactive || "Mission Standby ⏸️", {
+        position: "bottom-center",
+        style: { background: "#101010", color: "#9ca3af", border: "1px solid #333" }
+      });
+
       router.refresh(); 
-  };
+    };
   
   const handleCreate = async (formData: FormData, tags: string[]) => {
       formData.append("tags", tags.join(','));
       const res = await createNewProject(formData); 
       if (res.success) { 
           playSuccess(); 
+          // ✅ إظهار توست عند الإضافة
+          toast.success(txt.toast_project_added || "New Mission Initialized 🚀", {
+            position: "bottom-center",
+            style: { background: "#101010", color: "#fff", border: "1px solid #333" }
+          });
           router.refresh(); 
       }
   };
@@ -94,6 +114,13 @@ export default function Projects({ projects: initialProjects }: { projects: any[
       
       setIsSubmitting(false); setShipData(null); setPreviewImage(""); 
       playShipSound(); 
+      
+      // ✅ إظهار توست عند الإنهاء (Shipping)
+      toast.success(txt.toast_project_shipped || "Mission Deployed Successfully 🌍", {
+        position: "bottom-center",
+        style: { background: "#052e16", color: "#4ade80", border: "1px solid #166534" }
+      });
+
       router.refresh();
   };
 

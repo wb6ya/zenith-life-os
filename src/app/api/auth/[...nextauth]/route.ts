@@ -8,17 +8,14 @@ import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    // 1. Google
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-    // 2. GitHub
     GithubProvider({
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
     }),
-    // 3. Email/Password (القديم)
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -34,29 +31,34 @@ export const authOptions: NextAuthOptions = {
         if (!user || !user.password) throw new Error("User not found");
         const isCorrectPassword = await bcrypt.compare(credentials.password, user.password);
         if (!isCorrectPassword) throw new Error("Invalid password");
-        return { id: user._id.toString(), name: user.name, email: user.email };
+        
+        // نرجع البيانات الأساسية
+        return { 
+            id: user._id.toString(), 
+            name: user.name, 
+            email: user.email,
+            image: user.image 
+        };
       }
     })
   ],
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt" }, // نستخدم JWT للأداء العالي
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login",
   },
   callbacks: {
     async signIn({ user, account }) {
-      // منطق الدخول عبر السوشيال ميديا
       if (account?.provider === "google" || account?.provider === "github") {
         try {
           await connectDB();
           const existingUser = await User.findOne({ email: user.email });
 
           if (!existingUser) {
-            // مستخدم جديد؟ ننشئ له حساب تلقائياً
             await User.create({
               name: user.name,
               email: user.email,
-              // نضع باسورد عشوائي لأنه لن يحتاجه (يدخل عبر السوشيال)
+              image: user.image,
               password: await bcrypt.hash(Math.random().toString(36).slice(-8), 10),
               level: 1,
               xp: 0,
@@ -70,18 +72,29 @@ export const authOptions: NextAuthOptions = {
           return false;
         }
       }
-      return true; // للدخول العادي (Credentials)
+      return true;
     },
+
+    // ✅ التعديل هنا: نستخدم JWT لحفظ الـ ID مرة واحدة
+    async jwt({ token, user }) {
+      // هذه تعمل فقط عند تسجيل الدخول لأول مرة
+      if (user) {
+        token.id = user.id;
+        
+        // لو كان الدخول عبر السوشيال، نحتاج نتأكد أننا جبنا الـ MongoID
+        if(!token.id) {
+            await connectDB();
+            const dbUser = await User.findOne({ email: token.email });
+            if(dbUser) token.id = dbUser._id.toString();
+        }
+      }
+      return token;
+    },
+
+    // ✅ الجلسة الآن خفيفة وسريعة، تقرأ من التوكن مباشرة
     async session({ session, token }) {
       if (session?.user) {
-        // نربط الـ ID بالجلسة عشان نستخدمه في الموقع
-        // نحتاج نجيبه من الداتابيس لأن الـ token.sub قد يختلف في السوشيال
-        await connectDB();
-        const dbUser = await User.findOne({ email: session.user.email });
-        if (dbUser) {
-            (session.user as any).id = dbUser._id.toString();
-            session.user.name = dbUser.name; // تحديث الاسم من الداتابيس
-        }
+        (session.user as any).id = token.id;
       }
       return session;
     }
