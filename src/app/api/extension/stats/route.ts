@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // تأكد من المسار
+import { authOptions } from "@/lib/auth"; // تأكد من المسار
 import connectDB from "@/lib/db";
 import User from "@/models/User";
 import Task from "@/models/Task";
