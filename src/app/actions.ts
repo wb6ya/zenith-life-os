@@ -6,8 +6,10 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/db";
 import { sendDiscordMessage } from "@/lib/discord";
 import { z } from "zod";
+import { JSDOM } from "jsdom";
 import createDOMPurify from "dompurify";
 
+const window = new JSDOM("").window;
 const DOMPurify = createDOMPurify(window as unknown as any);
 import translate from '@iamtraction/google-translate';
 
