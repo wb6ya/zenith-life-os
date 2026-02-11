@@ -8,7 +8,6 @@ import { sendDiscordMessage } from "@/lib/discord";
 import { z } from "zod";
 import createDOMPurify from "dompurify";
 
-const window = new JSDOM("").window;
 const DOMPurify = createDOMPurify(window as unknown as any);
 import translate from '@iamtraction/google-translate';
 
