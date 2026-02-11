@@ -15,6 +15,6 @@ export const config = {
      * 3. /_next (ملفات النظام)
      * 4. الصور والملفات الثابتة (favicon, images)
      */
-    "/((?!login|register|api/auth|_next/static|_next/image|favicon.ico|images).*)",
+    "/((?!login|register|api/auth|api/signup|_next/static|_next/image|favicon.ico|images).*)",
   ],
 };
