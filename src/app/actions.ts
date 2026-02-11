@@ -6,11 +6,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/db";
 import { sendDiscordMessage } from "@/lib/discord";
 import { z } from "zod";
-import { JSDOM } from "jsdom";
-import createDOMPurify from "dompurify";
-
-const window = new JSDOM("").window;
-const DOMPurify = createDOMPurify(window as unknown as any);
+import { sanitize as sanitizeHtml } from "@/lib/sanitize";
 import translate from '@iamtraction/google-translate';
 
 // ✅ استيراد Rate Limiter (الحماية من السبام)
@@ -30,7 +26,7 @@ import Milestone from "@/models/Milestone";
 // ==========================================
 // 🛡️ SANITIZATION & HELPERS
 // ==========================================
-const sanitize = (val: string) => DOMPurify.sanitize(val.trim());
+const sanitize = (val: string) => sanitizeHtml(val);
 
 // ==========================================
 // 🛡️ Zod Schemas
@@ -215,16 +211,16 @@ export async function shipProject(projectId: string, data: any) {
     if (!user) return { success: false };
 
     // Manual Sanitization for extra safety on complex object
-    const safeTitle = data.finalTitle ? DOMPurify.sanitize(data.finalTitle) : undefined;
-    const safeDesc = data.finalDescription ? DOMPurify.sanitize(data.finalDescription) : undefined;
+    const safeTitle = data.finalTitle ? sanitize(data.finalTitle) : undefined;
+    const safeDesc = data.finalDescription ? sanitize(data.finalDescription) : undefined;
 
     await Project.findByIdAndUpdate(projectId, {
       status: 'completed',
       completedAt: new Date(),
       title: safeTitle,
       description: safeDesc,
-      githubLink: data.githubLink ? DOMPurify.sanitize(data.githubLink) : "",
-      demoLink: data.demoLink ? DOMPurify.sanitize(data.demoLink) : "",
+      githubLink: data.githubLink ? sanitize(data.githubLink) : "",
+      demoLink: data.demoLink ? sanitize(data.demoLink) : "",
       image: data.image, // Images usually handled by URL validation or upload logic
     });
 
@@ -374,8 +370,8 @@ export async function saveDayToPlan(planId: string, dayData: any) {
       cleanExercises = dayData.exercises
         .filter((ex: any) => ex.name && ex.name.trim() !== "")
         .map((ex: any) => ({
-          name: DOMPurify.sanitize(ex.name),
-          mediaUrl: DOMPurify.sanitize(ex.mediaUrl || ""),
+          name: sanitize(ex.name),
+          mediaUrl: sanitize(ex.mediaUrl || ""),
           mediaType: ex.mediaType,
           sets: Number(ex.sets),
           reps: Number(ex.reps),
@@ -385,7 +381,7 @@ export async function saveDayToPlan(planId: string, dayData: any) {
 
     const newDayData = {
       dayNumber: dayData.dayNumber,
-      title: DOMPurify.sanitize(dayData.title || ""),
+      title: sanitize(dayData.title || ""),
       isRestDay: dayData.isRestDay,
       exercises: cleanExercises
     };
@@ -727,8 +723,8 @@ export async function finishCourse(id: string, certData: any) {
     await Course.findByIdAndUpdate(id, {
       status: 'completed',
       completedAt: new Date(),
-      certificateTitle: DOMPurify.sanitize(certData.title || ""),
-      certificateLink: DOMPurify.sanitize(certData.link || ""),
+      certificateTitle: sanitize(certData.title || ""),
+      certificateLink: sanitize(certData.link || ""),
       certificateImage: certData.image
     });
     await User.findByIdAndUpdate(user._id, { $inc: { xp: 1000 } });
@@ -1278,7 +1274,7 @@ export async function createMilestone(formData: FormData) {
           if (safeXP < 10) safeXP = 10;
 
           return {
-            title: DOMPurify.sanitize(s.title || ""),
+            title: sanitize(s.title || ""),
             xp: safeXP,
             isCompleted: false
           };
@@ -1286,7 +1282,7 @@ export async function createMilestone(formData: FormData) {
       }
     } catch (e) {
       steps = stepsString.split('\n').filter(s => s.trim()).map(s => ({
-        title: DOMPurify.sanitize(s.trim()),
+        title: sanitize(s.trim()),
         isCompleted: false,
         xp: 100
       }));
