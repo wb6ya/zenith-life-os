@@ -222,7 +222,7 @@ export default function WorkoutPlayer() {
                 {/* الخلفية الضبابية (البيئة) */}
                 <div className="absolute inset-0 z-0">
                     {currentEx?.mediaUrl && (
-                        <img src={currentEx.mediaUrl.includes('youtube') ? `https://img.youtube.com/vi/${getYouTubeID(currentEx.mediaUrl)}/maxresdefault.jpg` : currentEx.mediaUrl} className="w-full h-full object-cover opacity-20 blur-3xl scale-110" />
+                        <img src={getYouTubeID(currentEx.mediaUrl || "") ? `https://img.youtube.com/vi/${getYouTubeID(currentEx.mediaUrl || "")}/maxresdefault.jpg` : currentEx.mediaUrl} className="w-full h-full object-cover opacity-20 blur-3xl scale-110" />
                     )}
                     <div className={`absolute inset-0 bg-black/40 ${isRest ? 'bg-orange-900/10' : ''}`} />
                 </div>
@@ -261,7 +261,7 @@ export default function WorkoutPlayer() {
                             {/* 🖥️ Cinema Player (Centered & Fixed Ratio) */}
                             <div className="flex-1 flex items-center justify-center w-full max-h-[60vh] my-auto">
                                 <div className="relative w-full max-w-5xl aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10 group">
-                                    {currentEx?.mediaUrl?.includes('youtube') ? (
+                                    {getYouTubeID(currentEx?.mediaUrl || "") ? (
                                         <iframe ref={iframeRef} src={`https://www.youtube.com/embed/${getYouTubeID(currentEx.mediaUrl)}?autoplay=1&controls=0&loop=1&playlist=${getYouTubeID(currentEx.mediaUrl)}&enablejsapi=1&rel=0&modestbranding=1`} className="w-full h-full object-cover" allow="autoplay; encrypted-media"></iframe>
                                     ) : (
                                         <img src={currentEx?.mediaUrl || "https://media.giphy.com/media/3o7TKSjRrfIPjeiQQo/giphy.gif"} className="w-full h-full object-contain" />

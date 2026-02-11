@@ -31,13 +31,13 @@ export const authOptions: NextAuthOptions = {
         if (!user || !user.password) throw new Error("User not found");
         const isCorrectPassword = await bcrypt.compare(credentials.password, user.password);
         if (!isCorrectPassword) throw new Error("Invalid password");
-        
+
         // نرجع البيانات الأساسية
-        return { 
-            id: user._id.toString(), 
-            name: user.name, 
-            email: user.email,
-            image: user.image 
+        return {
+          id: user._id.toString(),
+          name: user.name,
+          email: user.email,
+          image: user.image
         };
       }
     })
@@ -80,12 +80,12 @@ export const authOptions: NextAuthOptions = {
       // هذه تعمل فقط عند تسجيل الدخول لأول مرة
       if (user) {
         token.id = user.id;
-        
+
         // لو كان الدخول عبر السوشيال، نحتاج نتأكد أننا جبنا الـ MongoID
-        if(!token.id) {
-            await connectDB();
-            const dbUser = await User.findOne({ email: token.email });
-            if(dbUser) token.id = dbUser._id.toString();
+        if (!token.id) {
+          await connectDB();
+          const dbUser = await User.findOne({ email: token.email });
+          if (dbUser) token.id = dbUser._id.toString();
         }
       }
       return token;
