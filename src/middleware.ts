@@ -11,10 +11,10 @@ export const config = {
     /*
      * حماية كل المسارات ما عدا:
      * 1. /login, /register (صفحات الدخول)
-     * 2. /api/auth (مسارات المصادقة)
+     * 2. /api (كل روابط الـ API لأننا نتحقق من الأمان داخلها) 👈 هذا هو التعديل المهم
      * 3. /_next (ملفات النظام)
-     * 4. الصور والملفات الثابتة (favicon, images)
+     * 4. الصور والملفات الثابتة
      */
-    "/((?!login|register|api/auth|api/signup|_next/static|_next/image|favicon.ico|images).*)",
+    "/((?!login|register|api|_next/static|_next/image|favicon.ico|images).*)",
   ],
 };
