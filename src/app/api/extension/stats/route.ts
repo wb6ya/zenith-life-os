@@ -7,45 +7,50 @@ import Task from "@/models/Task";
 
 export async function GET(req: Request) {
     try {
-        // 1. فحص المتغيرات قبل البدء (أول سبب للسقوط)
-        if (!process.env.MONGODB_URI) {
-            throw new Error("❌ MONGODB_URI is missing in Vercel Environment Variables!");
-        }
-        if (!process.env.NEXTAUTH_SECRET) {
-            throw new Error("❌ NEXTAUTH_SECRET is missing in Vercel Environment Variables!");
-        }
+        // 1. فحص المتغيرات
+        if (!process.env.MONGODB_URI) throw new Error("❌ MONGODB_URI is missing!");
+        if (!process.env.NEXTAUTH_SECRET) throw new Error("❌ NEXTAUTH_SECRET is missing!");
 
-        // 2. محاولة الاتصال بقاعدة البيانات
-        console.log("➡️ Connecting to DB...");
+        // 2. الاتصال
         await connectDB();
-        console.log("✅ DB Connected");
-
-        // 3. محاولة جلب الجلسة
-        console.log("➡️ Fetching Session...");
+        
+        // 3. الجلسة
         const session = await getServerSession(authOptions);
-        console.log("ℹ️ Session Result:", session ? "User Found" : "No Session");
 
-        // إعدادات CORS
+        // إعدادات CORS (عشان الإضافة تشتغل)
         const headers = {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET",
         };
 
         if (!session || !session.user) {
-            return NextResponse.json({ loggedIn: false, message: "No active session found" }, { status: 200, headers });
+            return NextResponse.json({ loggedIn: false, message: "No active session" }, { status: 200, headers });
         }
 
-        // 4. جلب بيانات المستخدم
+        // 4. البحث عن المستخدم (الذكاء هنا 🧠)
+        // نحاول البحث بالـ ID، إذا فشل (بسبب أنه نص وليس ObjectId) نرجع null بدون ما ينهار السيرفر
         // @ts-ignore
-        const user = await User.findById(session.user.id).select("name level currentStreak xp");
+        let user = await User.findById(session.user.id).select("name level currentStreak xp").catch(() => null);
 
+        // الخطة ب: إذا لم نجده بالـ ID، نبحث بالإيميل (أضمن شيء)
+        if (!user && session.user.email) {
+            user = await User.findOne({ email: session.user.email }).select("name level currentStreak xp");
+        }
+
+        // إذا بعد كل هذا المستخدم غير موجود في القاعدة (حالة نادرة جداً)
         if (!user) {
-            throw new Error(`❌ User found in session but NOT in Database! ID: ${session.user.id}`);
+             return NextResponse.json({ error: "User found in session but not in DB" }, { status: 404, headers });
         }
 
-        // @ts-ignore
-        const pendingTasks = await Task.countDocuments({ userId: session.user.id, isCompleted: false, type: 'daily' });
+        // 5. حساب المهام (التعديل المهم هنا 👇)
+        // نستخدم user._id (الآيدي الحقيقي من الداتابيس) عشان نضمن ما يصير خطأ CastError مرة ثانية
+        const pendingTasks = await Task.countDocuments({ 
+            userId: user._id, 
+            isCompleted: false, 
+            type: 'daily' 
+        });
 
+        // 6. النتيجة النهائية
         return NextResponse.json({
             loggedIn: true,
             name: user.name,
@@ -56,13 +61,12 @@ export async function GET(req: Request) {
         }, { status: 200, headers });
 
     } catch (error: any) {
-        console.error("🔥 FATAL ERROR:", error);
-
-        // هذا هو الجزء المهم: سنعيد الخطأ الحقيقي للمتصفح
+        console.error("🔥 FATAL API ERROR:", error);
+        
         return NextResponse.json({
             error: "Server Crash Detected",
-            errorMessage: error.message, // 👈 هنا سيظهر السبب
-            errorStack: error.stack
+            errorMessage: error.message,
+            errorStack: process.env.NODE_ENV === 'development' ? error.stack : undefined
         }, { status: 500 });
     }
 }
