@@ -2,6 +2,8 @@
 const nextConfig = {
   // تفعيل الوضع الصارم
   reactStrictMode: true,
+
+  serverExternalPackages: ["jsdom"],
   
   // إخفاء تقنية "X-Powered-By: Next.js" عشان الهاكر ما يعرف نوع السيرفر
   poweredByHeader: false, 
